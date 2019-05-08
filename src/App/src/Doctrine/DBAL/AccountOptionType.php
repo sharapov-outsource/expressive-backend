@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace App\Doctrine\DBAL;
 
-use App\Entity\User\AccountOptionEntity;
+use App\Entity\Account\AccountOptionEntity;
 
 class AccountOptionType extends EnumType
 {

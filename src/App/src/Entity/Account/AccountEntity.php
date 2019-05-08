@@ -7,7 +7,7 @@
  * Time: 22:11
  */
 
-namespace App\Entity\User;
+namespace App\Entity\Account;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;

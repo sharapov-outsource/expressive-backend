@@ -16,7 +16,7 @@ use Interop\Container\ContainerInterface;
 
 class DoctrineArrayCacheFactory
 {
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): ArrayCache
     {
         return new ArrayCache();
     }

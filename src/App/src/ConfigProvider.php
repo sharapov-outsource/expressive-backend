@@ -6,10 +6,17 @@ namespace App;
 
 use App\Doctrine\DoctrineArrayCacheFactory;
 use App\Doctrine\DoctrineFactory;
+use App\Entity\Account\AccountEntity;
+use App\Handler\HalResource\Account\AccountCollection;
 use Doctrine\Common\Cache\Cache as DoctrineCache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\DBAL\Driver\PDOMySql\Driver;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Zend\Expressive\Hal\Metadata\MetadataMap;
+use Zend\Expressive\Hal\Metadata\RouteBasedCollectionMetadata;
+use Zend\Expressive\Hal\Metadata\RouteBasedResourceMetadata;
+use Zend\Hydrator\ReflectionHydrator;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 /**
  * The configuration provider for the App module
@@ -28,8 +35,9 @@ class ConfigProvider
     public function __invoke(): array
     {
         return [
-            'dependencies' => $this->getDependencies(),
-            'doctrine'     => $this->getEntities()
+            'dependencies'     => $this->getDependencies(),
+            'doctrine'         => $this->getEntities(),
+            MetadataMap::class => $this->getHalConfig()
         ];
     }
 
@@ -43,10 +51,30 @@ class ConfigProvider
                 Handler\PingHandler::class => Handler\PingHandler::class,
             ],
             'factories'  => [
-                'doctrine.entitymanager.orm_default' => DoctrineFactory::class,
-                DoctrineCache::class                 => DoctrineArrayCacheFactory::class,
-                Handler\HomePageHandler::class       => Handler\HomePageHandlerFactory::class,
-                Handler\DbTestHandler::class         => Handler\DbTestHandlerFactory::class,
+                // Doctrine factories
+                'doctrine.entitymanager.orm_app'                  =>
+                    DoctrineFactory::class,
+                DoctrineCache::class                              =>
+                    DoctrineArrayCacheFactory::class,
+                // Documentation
+                Doc\InvalidParameterHandler::class                =>
+                    InvokableFactory::class,
+                Doc\MethodNotAllowedHandler::class                =>
+                    InvokableFactory::class,
+                Doc\OutOfBoundsHandler::class                     =>
+                    InvokableFactory::class,
+                Doc\ResourceNotFoundHandler::class                =>
+                    InvokableFactory::class,
+                Doc\RuntimeErrorHandler::class                    =>
+                    InvokableFactory::class,
+                // Main handlers
+                Handler\HomePageHandler::class                    =>
+                    Handler\HomePageHandlerFactory::class,
+                Handler\DbTestHandler::class                      =>
+                    Handler\DbTestHandlerFactory::class,
+                // Hal resources
+                Handler\HalResource\Account\AccountHandler::class =>
+                    Handler\HalResource\Account\AccountHandlerFactory::class,
             ],
         ];
     }
@@ -63,7 +91,7 @@ class ConfigProvider
                     'cache' => 'array',
                     'paths' => [__DIR__ . '/Entity']
                 ],
-                'orm_default'    => [
+                'orm_app'        => [
                     'class'   => MappingDriverChain::class,
                     'drivers' => [
                         'App\src\Entity' => 'entity_driver'
@@ -73,7 +101,7 @@ class ConfigProvider
                 'proxyNamespace' => 'EntityProxy'
             ],
             'connection' => [
-                'orm_default' => [
+                'orm_app' => [
                     'doctrine_type_mappings' => [
                         'enum' => 'string'
                     ],
@@ -82,6 +110,42 @@ class ConfigProvider
                     ]
                 ]
             ]
+        ];
+    }
+
+    /**
+     * Returns HAL configuration
+     *
+     * @return array
+     */
+    public function getHalConfig(): array
+    {
+        return [
+            [
+                '__class__'      => RouteBasedResourceMetadata::class,
+                'resource_class' => AccountEntity::class,
+                'route'          => 'accounts.get',
+                'extractor'      => ReflectionHydrator::class,
+            ],
+            [
+                '__class__'           => RouteBasedCollectionMetadata::class,
+                'collection_class'    => AccountCollection::class,
+                'collection_relation' => 'account',
+                'route'               => 'accounts.get',
+            ],
+            /*
+            [
+                '__class__'      => RouteBasedResourceMetadata::class,
+                'resource_class' => Entity\SiteStatistic::class,
+                'route'          => 'api.statistics',
+                'extractor'      => ReflectionHydrator::class,
+            ],
+            [
+                '__class__'           => RouteBasedCollectionMetadata::class,
+                'collection_class'    => Site\StatisticCollection::class,
+                'collection_relation' => 'statistics',
+                'route'               => 'api.statistics',
+            ]*/
         ];
     }
 }

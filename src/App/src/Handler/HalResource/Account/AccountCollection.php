@@ -3,15 +3,16 @@
  * @copyright Sharapov A. <alexander@sharapov.biz>
  * @link      http://www.sharapov.biz/
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
- * Date: 2019-04-28
- * Time: 22:24
+ * Date: 2019-04-10
+ * Time: 14:01
  */
 
-namespace App\Entity\User;
+declare(strict_types=1);
 
-use Doctrine\ORM\EntityRepository;
+namespace App\Handler\HalResource\Account;
 
-class AccountRoleRepository extends EntityRepository
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
+class AccountCollection extends Paginator
 {
-
 }

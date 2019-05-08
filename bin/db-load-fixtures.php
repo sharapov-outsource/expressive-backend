@@ -14,7 +14,7 @@ chdir(__DIR__ . '/../');
 require 'vendor/autoload.php';
 
 use App\Doctrine\DoctrineFactory;
-use App\Entity\User;
+use App\Entity\Account;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\Loader;
@@ -26,9 +26,9 @@ class InitDB implements FixtureInterface
 {
     public $roles
         = [
-            User\AccountRoleEntity::DEFAULT_ROLE_DEVELOPER,
-            User\AccountRoleEntity::DEFAULT_ROLE_MODERATOR,
-            User\AccountRoleEntity::DEFAULT_ROLE_USER
+            Account\AccountRoleEntity::DEFAULT_ROLE_DEVELOPER,
+            Account\AccountRoleEntity::DEFAULT_ROLE_MODERATOR,
+            Account\AccountRoleEntity::DEFAULT_ROLE_USER
         ];
 
     public $default_username = 'admin';
@@ -38,16 +38,16 @@ class InitDB implements FixtureInterface
     {
         // Check if admin role exists
 
-        $userAccountRoleAdmin = new User\AccountRoleEntity();
+        $userAccountRoleAdmin = new Account\AccountRoleEntity();
         $userAccountRoleAdmin
-            ->setKey(User\AccountRoleEntity::DEFAULT_ROLE_ADMIN)
+            ->setKey(Account\AccountRoleEntity::DEFAULT_ROLE_ADMIN)
             ->setTitle('Administrator')
             ->setStatus(1);
         //$manager->persist($userAccountRoleAdmin);
         //$manager->flush();
 
         // Check if admin user exists
-        $userAccountAdmin = new User\AccountEntity();
+        $userAccountAdmin = new Account\AccountEntity();
         $userAccountAdmin
             ->setUsername($this->default_username)
             ->setPassword(md5($this->default_userpass))
@@ -61,7 +61,7 @@ class InitDB implements FixtureInterface
         // Check if other default roles are exists
         // Developer, moderator and user
         foreach ($this->roles as $role) {
-            $userAccountRole = new User\AccountRoleEntity();
+            $userAccountRole = new Account\AccountRoleEntity();
             $userAccountRole
                 ->setKey($role)
                 ->setTitle(ucfirst($role))

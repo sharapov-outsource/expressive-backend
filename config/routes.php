@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Psr\Container\ContainerInterface;
 use Zend\Expressive\Application;
+use Zend\Expressive\Helper\BodyParams\BodyParamsMiddleware;
 use Zend\Expressive\MiddlewareFactory;
 
 /**
@@ -38,6 +39,26 @@ return function (
     ContainerInterface $container
 ): void {
     $app->get('/', App\Handler\HomePageHandler::class, 'home');
-    $app->get('/api/ping', App\Handler\PingHandler::class, 'api.ping');
     $app->get('/db-test', App\Handler\DbTestHandler::class, 'db');
+
+    // Account resources
+    $app->get('/accounts[/{id}]', [
+        BodyParamsMiddleware::class,
+        App\Handler\HalResource\Account\AccountHandler::class
+    ], 'accounts.get');
+
+    // Documentation
+    $app->get('/api/ping',
+        App\Handler\PingHandler::class,
+        'api.ping');
+    $app->get('/api/doc/invalid-parameter',
+        App\Doc\InvalidParameterHandler::class);
+    $app->get('/api/doc/method-not-allowed-error',
+        App\Doc\MethodNotAllowedHandler::class);
+    $app->get('/api/doc/resource-not-found',
+        App\Doc\ResourceNotFoundHandler::class);
+    $app->get('/api/doc/parameter-out-of-range',
+        App\Doc\OutOfBoundsHandler::class);
+    $app->get('/api/doc/runtime-error',
+        App\Doc\RuntimeErrorHandler::class);
 };

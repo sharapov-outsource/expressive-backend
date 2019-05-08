@@ -9,20 +9,24 @@
 
 declare(strict_types=1);
 
-namespace App\Handler;
+namespace App\Handler\HalResource\Account;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Zend\Expressive\Hal\HalResponseFactory;
+use Zend\Expressive\Hal\ResourceGenerator;
 use Zend\Expressive\Router\RouterInterface;
 
-class DbTestHandlerFactory
+class AccountHandlerFactory
 {
     public function __invoke(
         ContainerInterface $container
     ): RequestHandlerInterface {
-        return new DbTestHandler(
+        return new AccountHandler(
             $container->get('doctrine.entitymanager.orm_app'),
-            $container->get(RouterInterface::class)
+            $container->get(RouterInterface::class),
+            $container->get(ResourceGenerator::class),
+            $container->get(HalResponseFactory::class)
         );
     }
 }

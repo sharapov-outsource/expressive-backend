@@ -11,7 +11,7 @@ declare(strict_types=1);
 return [
     'doctrine' => [
         'connection' => [
-            'orm_default' => [
+            'orm_app' => [
                 'params' => [
                     'host'     => 'backend_expressive_database_container',
                     'port'     => '3306',

@@ -7,7 +7,7 @@
  * Time: 22:15
  */
 
-namespace App\Entity\User;
+namespace App\Entity\Account;
 
 use Doctrine\ORM\Mapping as ORM;
 

@@ -21,7 +21,7 @@ abstract class EnumType extends DBAL\Types\Type
     public function getSQLDeclaration(
         array $fieldDeclaration,
         DBAL\Platforms\AbstractPlatform $platform
-    ) {
+    ): string {
         $values = array_map(function ($val) {
             return "'" . $val . "'";
         }, $this->values);
@@ -49,7 +49,7 @@ abstract class EnumType extends DBAL\Types\Type
         return $value;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

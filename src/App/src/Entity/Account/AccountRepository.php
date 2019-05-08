@@ -7,7 +7,7 @@
  * Time: 22:24
  */
 
-namespace App\Entity\User;
+namespace App\Entity\Account;
 
 use Doctrine\ORM\EntityRepository;
 

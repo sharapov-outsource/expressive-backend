@@ -70,18 +70,18 @@ class DoctrineFactory
 
         // EntityManager
         $em = EntityManager::create(
-            $config->get('doctrine.connection.orm_default.params'),
+            $config->get('doctrine.connection.orm_app.params'),
             $doctrine
         );
 
         try {
-            if ($config->has('doctrine.connection.orm_default.doctrine_type_mappings')) {
+            if ($config->has('doctrine.connection.orm_app.doctrine_type_mappings')) {
                 $dbPlatform = $em
                     ->getConnection()
                     ->getSchemaManager()
                     ->getDatabasePlatform();
                 foreach (
-                    $config->get('doctrine.connection.orm_default.doctrine_type_mappings')
+                    $config->get('doctrine.connection.orm_app.doctrine_type_mappings')
                     as
                     $dbType => $doctrineType
                 ) {
@@ -100,7 +100,7 @@ class DoctrineFactory
      *
      * @throws ORMException
      */
-    private function registerDBAL()
+    private function registerDBAL(): void
     {
         try {
             DBALtype::addType('accountOptionType', AccountOptionType::class);
