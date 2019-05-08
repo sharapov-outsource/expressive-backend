@@ -15,14 +15,15 @@ use Doctrine\ORM\PersistentCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * @ORM\Table(indexes={
+ * @ORM\Table(name="Account",
+ * indexes={
  *   @ORM\Index(name="username", columns={"username"}),
  *   @ORM\Index(name="status", columns={"status"})
  * })
  * @ORM\Entity(repositoryClass="AccountRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Account
+class AccountEntity
 {
     const SORT_BY = 'id';
     const ORDER_BY = 'ASC';
@@ -49,14 +50,14 @@ class Account
     /** @ORM\Column(type="string", length=128, nullable=true) */
     protected $activateToken;
     /**
-     * @ORM\ManyToOne(targetEntity="AccountRole", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AccountRoleEntity", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="accountRole", referencedColumnName="id", onDelete="SET NULL")
      * })
      */
     protected $accountRole;
     /**
-     * @ORM\OneToMany(targetEntity="AccountOption",mappedBy="account", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AccountOptionEntity",mappedBy="account", cascade={"persist"})
      * @ORM\OrderBy({"optionKey" = "ASC"})
      */
     protected $accountOption;
@@ -67,13 +68,13 @@ class Account
      */
     protected $accountDefaultOptions
         = [
-            AccountOption::OPTION_TYPE_PERSONAL => [
+            AccountOptionEntity::OPTION_TYPE_PERSONAL => [
                 'firstName',
                 'lastName',
                 'birthDate',
                 'avatar',
             ],
-            AccountOption::OPTION_TYPE_ADDRESS  => [
+            AccountOptionEntity::OPTION_TYPE_ADDRESS  => [
                 'country',
                 'state',
                 'city',
@@ -228,11 +229,11 @@ class Account
     }
 
     /**
-     * @param AccountRole $accountRole
+     * @param AccountRoleEntity $accountRole
      *
      * @return $this
      */
-    public function setAccountRole(AccountRole $accountRole)
+    public function setAccountRole(AccountRoleEntity $accountRole)
     {
         $this->accountRole = $accountRole;
         return $this;
@@ -282,7 +283,7 @@ class Account
         if ($this->accountOption instanceof PersistentCollection) {
             $collection = $this->accountOption->filter(
                 function ($option) use ($optionTypeKey) {
-                    if ($option instanceof AccountOption) {
+                    if ($option instanceof AccountOptionEntity) {
                         return ($optionTypeKey == $option->getOptionTypeKey());
                     } else {
                         return null;
@@ -308,7 +309,7 @@ class Account
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $arrayCollection
      *
-     * @return Account
+     * @return AccountEntity
      */
     public function setAccountOption(ArrayCollection $arrayCollection)
     {
@@ -343,7 +344,7 @@ class Account
             }
             $option = $this->accountOption->filter(
                 function ($option) use ($optionKey) {
-                    if ($option instanceof AccountOption) {
+                    if ($option instanceof AccountOptionEntity) {
                         return ($optionKey == $option->getOptionKey());
                     } else {
                         return null;
@@ -368,7 +369,7 @@ class Account
         if ($this->accountOption instanceof PersistentCollection) {
             $option = $this->accountOption->filter(
                 function ($option) use ($optionKey) {
-                    if ($option instanceof AccountOption) {
+                    if ($option instanceof AccountOptionEntity) {
                         return ($optionKey == $option->getOptionKey());
                     } else {
                         return null;
@@ -393,7 +394,7 @@ class Account
         if ($this->accountOption instanceof PersistentCollection) {
             return $this->accountOption->filter(
                 function ($option) use ($optionKey) {
-                    if ($option instanceof AccountOption) {
+                    if ($option instanceof AccountOptionEntity) {
                         unset($option);
                         return true;
                     } else {
@@ -410,7 +411,7 @@ class Account
      */
     public function getAccountOptionListPersonal()
     {
-        return $this->filterAccountOptionType(AccountOption::OPTION_TYPE_PERSONAL);
+        return $this->filterAccountOptionType(AccountOptionEntity::OPTION_TYPE_PERSONAL);
     }
 
     /**
@@ -438,7 +439,7 @@ class Account
      */
     public function getAccountOptionListAddress()
     {
-        return $this->filterAccountOptionType(AccountOption::OPTION_TYPE_ADDRESS);
+        return $this->filterAccountOptionType(AccountOptionEntity::OPTION_TYPE_ADDRESS);
     }
 
     /**
@@ -446,7 +447,7 @@ class Account
      */
     public function getAccountOptionListCustom()
     {
-        return $this->filterAccountOptionType(AccountOption::OPTION_TYPE_CUSTOM);
+        return $this->filterAccountOptionType(AccountOptionEntity::OPTION_TYPE_CUSTOM);
     }
 
     /**

@@ -11,15 +11,15 @@ declare(strict_types=1);
 
 namespace App\Doctrine\DBAL;
 
-use App\Entity\User\AccountOption;
+use App\Entity\User\AccountOptionEntity;
 
 class AccountOptionType extends EnumType
 {
     protected $name = 'accountOptionType';
     protected $values
         = [
-            AccountOption::OPTION_TYPE_PERSONAL,
-            AccountOption::OPTION_TYPE_ADDRESS,
-            AccountOption::OPTION_TYPE_CUSTOM
+            AccountOptionEntity::OPTION_TYPE_PERSONAL,
+            AccountOptionEntity::OPTION_TYPE_ADDRESS,
+            AccountOptionEntity::OPTION_TYPE_CUSTOM
         ];
 }

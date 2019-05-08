@@ -1,10 +1,17 @@
 <?php
+/**
+ * @copyright Sharapov A. <alexander@sharapov.biz>
+ * @link      http://www.sharapov.biz/
+ * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
+ * Date: 2019-04-28
+ * Time: 22:11
+ */
 
 declare(strict_types=1);
 
 namespace App\Handler;
 
-use App\Entity\User\AccountRole;
+use App\Entity\User\AccountRoleEntity;
 use App\Traits\EntityManagerTrait;
 use App\Traits\RouterTrait;
 use Doctrine\ORM\EntityManager;
@@ -19,9 +26,6 @@ class DbTestHandler implements RequestHandlerInterface
     use EntityManagerTrait;
     use RouterTrait;
 
-    /** @var Router\RouterInterface */
-    private $router;
-
     public function __construct(
         EntityManager $entityManager,
         Router\RouterInterface $router
@@ -33,7 +37,7 @@ class DbTestHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $roles = $this->getRepository(AccountRole::class);
+        $roles = $this->getRepository(AccountRoleEntity::class);
 
         $rolesCollection = [];
         foreach ($roles->findAll() as $role) {

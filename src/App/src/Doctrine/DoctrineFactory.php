@@ -35,7 +35,7 @@ class DoctrineFactory
      * @param ContainerInterface $container
      *
      * @return EntityManager
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      */
     public function __invoke(ContainerInterface $container): EntityManager
     {
@@ -74,7 +74,7 @@ class DoctrineFactory
             $doctrine
         );
 
-        //try {
+        try {
             if ($config->has('doctrine.connection.orm_default.doctrine_type_mappings')) {
                 $dbPlatform = $em
                     ->getConnection()
@@ -89,9 +89,9 @@ class DoctrineFactory
                         ->registerDoctrineTypeMapping($dbType, $doctrineType);
                 }
             }
-        //} catch (DBALException $e) {
-          //  throw new ORMException($e->getMessage());
-        //}
+        } catch (DBALException $e) {
+            throw new ORMException($e->getMessage());
+        }
         return $em;
     }
 

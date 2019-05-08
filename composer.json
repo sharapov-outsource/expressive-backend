@@ -80,9 +80,13 @@
       "@cs-check",
       "@test"
     ],
+    "init-application": [
+      "@db:init-schema",
+      "@db:load-fixtures"
+    ],
     "clear-config-cache": "php bin/clear-config-cache.php",
-    "init-db-schema": "docker exec expressive_backend_phpfpm_container /bin/sh -c 'php /var/www/vendor/bin/doctrine orm:schema-tool:update --force'",
-    "init-db-fixtures": "docker exec expressive_backend_phpfpm_container /bin/sh -c 'php bin/init-db-fixtures.php'",
+    "db:init-schema": "docker exec expressive_backend_phpfpm_container /bin/sh -c 'php /var/www/vendor/bin/doctrine orm:schema-tool:update --force'",
+    "db:load-fixtures": "docker exec expressive_backend_phpfpm_container /bin/sh -c 'php bin/db-load-fixtures.php'",
     "cs-check": "phpcs",
     "cs-fix": "phpcbf",
     "serve": "php -S 0.0.0.0:8080 -t html/",

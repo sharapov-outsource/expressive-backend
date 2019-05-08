@@ -12,7 +12,8 @@ namespace App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(indexes={
+ * @ORM\Table(name="AccountOption",
+ * indexes={
  *   @ORM\Index(name="optionTypeKey", columns={"optionTypeKey"}),
  *   @ORM\Index(name="optionKey", columns={"optionKey"})
  * },
@@ -21,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  * })
  * @ORM\Entity(repositoryClass="AccountOptionRepository")
  */
-class AccountOption
+class AccountOptionEntity
 {
     const OPTION_TYPE_PERSONAL = 'personal';
     const OPTION_TYPE_ADDRESS = 'address';
@@ -43,7 +44,7 @@ class AccountOption
     /** @ORM\Column(type="boolean", options={"default":false}) */
     protected $isRequired;
     /**
-     * @ORM\ManyToOne(targetEntity="Account")
+     * @ORM\ManyToOne(targetEntity="AccountEntity")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="account", referencedColumnName="id", onDelete="cascade")
      * })
@@ -256,11 +257,11 @@ class AccountOption
     }
 
     /**
-     * @param Account $account
+     * @param AccountEntity $account
      *
      * @return $this
      */
-    public function setAccount(Account $account)
+    public function setAccount(AccountEntity $account)
     {
         $this->account = $account;
         return $this;

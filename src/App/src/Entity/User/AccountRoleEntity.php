@@ -12,13 +12,14 @@ namespace App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(indexes={
+ * @ORM\Table(name="AccountRole",
+ * indexes={
  *   @ORM\Index(name="roleKey", columns={"roleKey"})
  * })
  * @ORM\Entity(repositoryClass="AccountRoleRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class AccountRole
+class AccountRoleEntity
 {
     const DEFAULT_ROLE_ADMIN = 'admin';
     const DEFAULT_ROLE_USER = 'user';
