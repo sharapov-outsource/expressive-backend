@@ -1,6 +1,19 @@
 <?php
+/**
+ * @copyright Sharapov A. <alexander@sharapov.biz>
+ * @link      http://www.sharapov.biz/
+ * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
+ * Date: 2019-04-28
+ * Time: 23:00
+ */
 
 declare(strict_types=1);
+
+use Psr\Container\ContainerInterface;
+use Zend\Expressive\Application;
+use Zend\Expressive\MiddlewareFactory;
+
+date_default_timezone_set("UTC"); // Set the default timezone
 
 // Delegate static file requests back to the PHP built-in webserver
 if (PHP_SAPI === 'cli-server' && $_SERVER['SCRIPT_FILENAME'] !== __FILE__) {
@@ -14,12 +27,12 @@ require 'vendor/autoload.php';
  * Self-called anonymous function that creates its own scope and keep the global namespace clean.
  */
 (function () {
-    /** @var \Psr\Container\ContainerInterface $container */
+    /** @var ContainerInterface $container */
     $container = require 'config/container.php';
 
-    /** @var \Zend\Expressive\Application $app */
-    $app = $container->get(\Zend\Expressive\Application::class);
-    $factory = $container->get(\Zend\Expressive\MiddlewareFactory::class);
+    /** @var Application $app */
+    $app = $container->get(Application::class);
+    $factory = $container->get(MiddlewareFactory::class);
 
     // Execute programmatic/declarative middleware pipeline and routing
     // configuration statements

@@ -32,7 +32,12 @@ use Zend\Expressive\MiddlewareFactory;
  *     'contact'
  * );
  */
-return function (Application $app, MiddlewareFactory $factory, ContainerInterface $container) : void {
+return function (
+    Application $app,
+    MiddlewareFactory $factory,
+    ContainerInterface $container
+): void {
     $app->get('/', App\Handler\HomePageHandler::class, 'home');
     $app->get('/api/ping', App\Handler\PingHandler::class, 'api.ping');
+    $app->get('/db-test', App\Handler\DbTestHandler::class, 'db');
 };

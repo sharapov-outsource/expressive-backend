@@ -19,7 +19,9 @@ services:
       - backend
       - frontend
   php:
-    image: ${PHP_IMAGE_NAME}
+    build:
+      context: .
+      dockerfile: ./etc/php/Dockerfile
     container_name: ${PHP_CONTAINER_NAME}
     restart: always
     volumes:

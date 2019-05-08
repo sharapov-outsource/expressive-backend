@@ -1,5 +1,12 @@
 <?php
 /**
+ * @copyright Sharapov A. <alexander@sharapov.biz>
+ * @link      http://www.sharapov.biz/
+ * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
+ * Date: 2019-05-07
+ * Time: 22:31
+ */
+/**
  * Script for clearing the configuration cache.
  *
  * Can also be invoked as `composer clear-config-cache`.
@@ -17,12 +24,12 @@ require 'vendor/autoload.php';
 
 $config = include 'config/config.php';
 
-if (! isset($config['config_cache_path'])) {
+if (!isset($config['config_cache_path'])) {
     echo "No configuration cache path found" . PHP_EOL;
     exit(0);
 }
 
-if (! file_exists($config['config_cache_path'])) {
+if (!file_exists($config['config_cache_path'])) {
     printf(
         "Configured config cache file '%s' not found%s",
         $config['config_cache_path'],

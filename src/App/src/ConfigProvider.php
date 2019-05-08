@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Doctrine\DoctrineArrayCacheFactory;
+use App\Doctrine\DoctrineFactory;
+use Doctrine\Common\Cache\Cache as DoctrineCache;
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
+use Doctrine\DBAL\Driver\PDOMySql\Driver;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+
 /**
  * The configuration provider for the App module
  *
@@ -18,40 +25,63 @@ class ConfigProvider
      * method which returns an array with its configuration.
      *
      */
-    public function __invoke() : array
+    public function __invoke(): array
     {
         return [
             'dependencies' => $this->getDependencies(),
-            'templates'    => $this->getTemplates(),
+            'doctrine'     => $this->getEntities()
         ];
     }
 
     /**
      * Returns the container dependencies
      */
-    public function getDependencies() : array
+    private function getDependencies(): array
     {
         return [
             'invokables' => [
                 Handler\PingHandler::class => Handler\PingHandler::class,
             ],
             'factories'  => [
-                Handler\HomePageHandler::class => Handler\HomePageHandlerFactory::class,
+                'doctrine.entitymanager.orm_default' => DoctrineFactory::class,
+                DoctrineCache::class                 => DoctrineArrayCacheFactory::class,
+                Handler\HomePageHandler::class       => Handler\HomePageHandlerFactory::class,
+                Handler\DbTestHandler::class         => Handler\DbTestHandlerFactory::class,
             ],
         ];
     }
 
     /**
-     * Returns the templates configuration
+     * Returns the container entities
      */
-    public function getTemplates() : array
+    private function getEntities(): array
     {
         return [
-            'paths' => [
-                'app'    => [__DIR__ . '/../templates/app'],
-                'error'  => [__DIR__ . '/../templates/error'],
-                'layout' => [__DIR__ . '/../templates/layout'],
+            'driver'     => [
+                'entity_driver'  => [
+                    'class' => AnnotationDriver::class,
+                    'cache' => 'array',
+                    'paths' => [__DIR__ . '/Entity']
+                ],
+                'orm_default'    => [
+                    'class'   => MappingDriverChain::class,
+                    'drivers' => [
+                        'App\src\Entity' => 'entity_driver'
+                    ],
+                ],
+                'proxyDir'       => 'etc/data/EntityProxy',
+                'proxyNamespace' => 'EntityProxy'
             ],
+            'connection' => [
+                'orm_default' => [
+                    'doctrine_type_mappings' => [
+                        'enum' => 'string'
+                    ],
+                    'params'                 => [
+                        'driverClass' => Driver::class,
+                    ]
+                ]
+            ]
         ];
     }
 }
