@@ -12,6 +12,11 @@ use Doctrine\Common\Cache\Cache as DoctrineCache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\DBAL\Driver\PDOMySql\Driver;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doc\InvalidParameterHandler;
+use Doc\MethodNotAllowedHandler;
+use Doc\OutOfBoundsHandler;
+use Doc\ResourceNotFoundHandler;
+use Doc\RuntimeErrorHandler;
 use Zend\Expressive\Hal\Metadata\MetadataMap;
 use Zend\Expressive\Hal\Metadata\RouteBasedCollectionMetadata;
 use Zend\Expressive\Hal\Metadata\RouteBasedResourceMetadata;
@@ -57,16 +62,11 @@ class ConfigProvider
                 DoctrineCache::class                              =>
                     DoctrineArrayCacheFactory::class,
                 // Documentation
-                Doc\InvalidParameterHandler::class                =>
-                    InvokableFactory::class,
-                Doc\MethodNotAllowedHandler::class                =>
-                    InvokableFactory::class,
-                Doc\OutOfBoundsHandler::class                     =>
-                    InvokableFactory::class,
-                Doc\ResourceNotFoundHandler::class                =>
-                    InvokableFactory::class,
-                Doc\RuntimeErrorHandler::class                    =>
-                    InvokableFactory::class,
+                Doc\InvalidParameterHandler::class => InvokableFactory::class,
+                Doc\MethodNotAllowedHandler::class => InvokableFactory::class,
+                Doc\OutOfBoundsHandler::class      => InvokableFactory::class,
+                Doc\ResourceNotFoundHandler::class => InvokableFactory::class,
+                Doc\RuntimeErrorHandler::class     => InvokableFactory::class,
                 // Main handlers
                 Handler\HomePageHandler::class                    =>
                     Handler\HomePageHandlerFactory::class,
@@ -124,14 +124,14 @@ class ConfigProvider
             [
                 '__class__'      => RouteBasedResourceMetadata::class,
                 'resource_class' => AccountEntity::class,
-                'route'          => 'accounts.get',
+                'route'          => 'api.accounts.get',
                 'extractor'      => ReflectionHydrator::class,
             ],
             [
                 '__class__'           => RouteBasedCollectionMetadata::class,
                 'collection_class'    => AccountCollection::class,
-                'collection_relation' => 'account',
-                'route'               => 'accounts.get',
+                'collection_relation' => 'Account',
+                'route'               => 'api.accounts.get',
             ],
             /*
             [

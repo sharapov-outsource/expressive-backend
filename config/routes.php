@@ -42,10 +42,10 @@ return function (
     $app->get('/db-test', App\Handler\DbTestHandler::class, 'db');
 
     // Account resources
-    $app->get('/accounts[/{id}]', [
+    $app->get('/api/accounts[/{id}]', [
         BodyParamsMiddleware::class,
         App\Handler\HalResource\Account\AccountHandler::class
-    ], 'accounts.get');
+    ], 'api.accounts.get');
 
     // Documentation
     $app->get('/api/ping',

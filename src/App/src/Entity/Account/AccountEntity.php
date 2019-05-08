@@ -10,9 +10,9 @@
 namespace App\Entity\Account;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
-use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Table(name="Account",
@@ -294,6 +294,7 @@ class AccountEntity
                 if ($returnAssoc) {
                     $returnAssoc = [];
                     foreach ($collection as $option) {
+                        /** @var AccountOptionEntity $option */
                         $returnAssoc[$option->getOptionKey()]
                             = $option->getOptionValue();
                     }
@@ -424,6 +425,7 @@ class AccountEntity
         if ($this->accountOption instanceof PersistentCollection) {
             $option = $this->accountOption->filter(
                 function ($option) use ($typeKey) {
+                    /** @var AccountOptionEntity $option */
                     return ($typeKey == $option->getOptionTypeKey());
                 }
             );

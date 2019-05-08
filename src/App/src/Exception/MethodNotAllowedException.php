@@ -15,8 +15,7 @@ use DomainException;
 use Zend\ProblemDetails\Exception\CommonProblemDetailsExceptionTrait;
 use Zend\ProblemDetails\Exception\ProblemDetailsExceptionInterface;
 
-class MethodNotAllowedException extends DomainException
-    implements ProblemDetailsExceptionInterface
+class MethodNotAllowedException extends DomainException implements ProblemDetailsExceptionInterface
 {
     use CommonProblemDetailsExceptionTrait;
 
