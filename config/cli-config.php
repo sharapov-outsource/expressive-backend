@@ -7,6 +7,8 @@
  * Time: 22:58
  */
 
+declare(strict_types=1);
+
 use App\Doctrine\DoctrineFactory;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
