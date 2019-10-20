@@ -39,6 +39,10 @@ class AccountEntityHydratorFactory implements FactoryInterface
             'accountRole',
             new Strategy\AccountRoleStrategy()
         );
+        $hydrator->addStrategy(
+            'accountOption',
+            new Strategy\AccountOptionStrategy()
+        );
         $hydrator->addFilter('exclude', function ($property) {
             if (in_array($property, ['activateToken', 'password'])) {
                 return false;

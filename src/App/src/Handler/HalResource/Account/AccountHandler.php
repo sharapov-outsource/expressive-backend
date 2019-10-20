@@ -12,8 +12,6 @@ declare(strict_types=1);
 namespace App\Handler\HalResource\Account;
 
 use App\Entity\Account\AccountEntity;
-use App\Entity\Account\AccountEntityHal;
-use App\Entity\Account\AccountEntityHalMapper;
 use App\Exception\NoResourceFoundException;
 use App\Exception\OutOfBoundsException;
 use App\Traits\EntityManagerTrait;
@@ -97,13 +95,9 @@ class AccountHandler implements RequestHandlerInterface
         ServerRequestInterface $request
     ): ResponseInterface {
         $account
-            = new AccountEntityHalMapper($this->getRepository(AccountEntity::class)
-            ->find($id));
+            = $this->getRepository(AccountEntity::class)
+            ->find($id);
 
-
-        print_r($account);
-
-        die;;
         if (! $account instanceof AccountEntity) {
             throw NoResourceFoundException::create('Account not found');
         }
