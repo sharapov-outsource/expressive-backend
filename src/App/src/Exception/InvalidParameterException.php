@@ -15,7 +15,8 @@ use DomainException;
 use Zend\ProblemDetails\Exception\CommonProblemDetailsExceptionTrait;
 use Zend\ProblemDetails\Exception\ProblemDetailsExceptionInterface;
 
-class InvalidParameterException extends DomainException implements ProblemDetailsExceptionInterface
+class InvalidParameterException extends DomainException
+    implements ProblemDetailsExceptionInterface
 {
     use CommonProblemDetailsExceptionTrait;
 

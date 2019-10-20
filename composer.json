@@ -59,6 +59,7 @@
     "roave/security-advisories": "dev-master",
     "squizlabs/php_codesniffer": "^2.9.1",
     "zendframework/zend-expressive-tooling": "^1.0",
+    "zendframework/zend-coding-standard": "^1.0",
     "zfcampus/zf-development-mode": "^3.1",
     "filp/whoops": "^2.1.12",
     "doctrine/data-fixtures": "^1.3"

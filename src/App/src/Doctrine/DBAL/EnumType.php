@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace App\Doctrine\DBAL;
 
 use Doctrine\DBAL;
+use InvalidArgumentException;
 
 abstract class EnumType extends DBAL\Types\Type
 {
@@ -41,8 +42,8 @@ abstract class EnumType extends DBAL\Types\Type
         $value,
         DBAL\Platforms\AbstractPlatform $platform
     ) {
-        if (!in_array($value, $this->values)) {
-            throw new \InvalidArgumentException("Invalid '" . $this->name
+        if (! in_array($value, $this->values)) {
+            throw new InvalidArgumentException("Invalid '" . $this->name
                 . "' value.");
         }
 

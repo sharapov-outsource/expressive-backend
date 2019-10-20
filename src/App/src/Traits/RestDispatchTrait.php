@@ -55,7 +55,7 @@ trait RestDispatchTrait
      * @param ServerRequestInterface $request
      * @param                        $instance
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      * @throws Exception\OutOfBoundsException if an `OutOfBoundsException` is
      *     thrown by the response factory and/or resource generator.
      */
@@ -76,16 +76,25 @@ trait RestDispatchTrait
     }
 
     /**
-     * Sets resource generator
+     * Gets response factory
      *
-     * @param ResourceGenerator $resourceGenerator
+     * @return HalResponseFactory
+     */
+    public function getResponseFactory()
+    {
+        return $this->responseFactory;
+    }
+
+    /**
+     * Sets response factory
+     *
+     * @param HalResponseFactory $halResponseFactory
      *
      * @return $this
      */
-    public function setResourceGenerator(ResourceGenerator $resourceGenerator
-    ): self
-    {
-        $this->resourceGenerator = $resourceGenerator;
+    public function setResponseFactory(HalResponseFactory $halResponseFactory
+    ): self {
+        $this->responseFactory = $halResponseFactory;
         return $this;
     }
 
@@ -100,26 +109,15 @@ trait RestDispatchTrait
     }
 
     /**
-     * Sets response factory
+     * Sets resource generator
      *
-     * @param HalResponseFactory $halResponseFactory
+     * @param ResourceGenerator $resourceGenerator
      *
      * @return $this
      */
-    public function setResponseFactory(HalResponseFactory $halResponseFactory
-    ): self
-    {
-        $this->responseFactory = $halResponseFactory;
+    public function setResourceGenerator(ResourceGenerator $resourceGenerator
+    ): self {
+        $this->resourceGenerator = $resourceGenerator;
         return $this;
-    }
-
-    /**
-     * Gets response factory
-     *
-     * @return HalResponseFactory
-     */
-    public function getResponseFactory()
-    {
-        return $this->responseFactory;
     }
 }

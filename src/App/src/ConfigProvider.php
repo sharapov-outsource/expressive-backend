@@ -7,20 +7,20 @@ namespace App;
 use App\Doctrine\DoctrineArrayCacheFactory;
 use App\Doctrine\DoctrineFactory;
 use App\Entity\Account\AccountEntity;
+use App\Entity\Account\Hydrator\AccountEntityHydratorFactory;
 use App\Handler\HalResource\Account\AccountCollection;
-use Doctrine\Common\Cache\Cache as DoctrineCache;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
-use Doctrine\DBAL\Driver\PDOMySql\Driver;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doc\InvalidParameterHandler;
 use Doc\MethodNotAllowedHandler;
 use Doc\OutOfBoundsHandler;
 use Doc\ResourceNotFoundHandler;
 use Doc\RuntimeErrorHandler;
+use Doctrine\Common\Cache\Cache as DoctrineCache;
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
+use Doctrine\DBAL\Driver\PDOMySql\Driver;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Zend\Expressive\Hal\Metadata\MetadataMap;
 use Zend\Expressive\Hal\Metadata\RouteBasedCollectionMetadata;
 use Zend\Expressive\Hal\Metadata\RouteBasedResourceMetadata;
-use Zend\Hydrator\ReflectionHydrator;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
 /**
@@ -42,7 +42,12 @@ class ConfigProvider
         return [
             'dependencies'     => $this->getDependencies(),
             'doctrine'         => $this->getEntities(),
-            MetadataMap::class => $this->getHalConfig()
+            MetadataMap::class => $this->getHalConfig(),
+            'hydrators'        => [
+                'factories' => [
+                    AccountEntityHydratorFactory::class => AccountEntityHydratorFactory::class,
+                ],
+            ],
         ];
     }
 
@@ -62,11 +67,11 @@ class ConfigProvider
                 DoctrineCache::class                              =>
                     DoctrineArrayCacheFactory::class,
                 // Documentation
-                Doc\InvalidParameterHandler::class => InvokableFactory::class,
-                Doc\MethodNotAllowedHandler::class => InvokableFactory::class,
-                Doc\OutOfBoundsHandler::class      => InvokableFactory::class,
-                Doc\ResourceNotFoundHandler::class => InvokableFactory::class,
-                Doc\RuntimeErrorHandler::class     => InvokableFactory::class,
+                Doc\InvalidParameterHandler::class                => InvokableFactory::class,
+                Doc\MethodNotAllowedHandler::class                => InvokableFactory::class,
+                Doc\OutOfBoundsHandler::class                     => InvokableFactory::class,
+                Doc\ResourceNotFoundHandler::class                => InvokableFactory::class,
+                Doc\RuntimeErrorHandler::class                    => InvokableFactory::class,
                 // Main handlers
                 Handler\HomePageHandler::class                    =>
                     Handler\HomePageHandlerFactory::class,
@@ -125,7 +130,11 @@ class ConfigProvider
                 '__class__'      => RouteBasedResourceMetadata::class,
                 'resource_class' => AccountEntity::class,
                 'route'          => 'api.accounts.get',
-                'extractor'      => ReflectionHydrator::class,
+                'extractor'      => AccountEntityHydratorFactory::class,
+                //ReflectionHydrator::class,
+                //ObjectPropertyHydrator::class
+
+                //'hydrator' => 'User\\Hydrator\\UserProfile',
             ],
             [
                 '__class__'           => RouteBasedCollectionMetadata::class,

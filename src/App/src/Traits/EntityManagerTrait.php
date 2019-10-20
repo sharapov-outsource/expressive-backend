@@ -11,7 +11,9 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
 trait EntityManagerTrait
 {
@@ -19,16 +21,15 @@ trait EntityManagerTrait
     private $entityManager;
 
     /**
-     * Sets EntityManager
+     * Returns entity repository collection
      *
-     * @param EntityManager $entityManager
+     * @param string $entityClass
      *
-     * @return $this
+     * @return ObjectRepository|EntityRepository
      */
-    public function setEntityManager(EntityManager $entityManager): self
+    public function getRepository(string $entityClass)
     {
-        $this->entityManager = $entityManager;
-        return $this;
+        return $this->getEntityManager()->getRepository($entityClass);
     }
 
     /**
@@ -42,14 +43,15 @@ trait EntityManagerTrait
     }
 
     /**
-     * Returns entity repository collection
+     * Sets EntityManager
      *
-     * @param string $entityClass
+     * @param EntityManager $entityManager
      *
-     * @return \Doctrine\Common\Persistence\ObjectRepository|\Doctrine\ORM\EntityRepository
+     * @return $this
      */
-    public function getRepository(string $entityClass)
+    public function setEntityManager(EntityManager $entityManager): self
     {
-        return $this->getEntityManager()->getRepository($entityClass);
+        $this->entityManager = $entityManager;
+        return $this;
     }
 }

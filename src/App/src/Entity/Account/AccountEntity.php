@@ -9,10 +9,12 @@
 
 namespace App\Entity\Account;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
+use Exception;
 
 /**
  * @ORM\Table(name="Account",
@@ -108,6 +110,14 @@ class AccountEntity
     }
 
     /**
+     * @return mixed
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
      * @param $username
      *
      * @return $this
@@ -121,9 +131,9 @@ class AccountEntity
     /**
      * @return mixed
      */
-    public function getUsername()
+    public function getPassword()
     {
-        return $this->username;
+        return $this->password;
     }
 
     /**
@@ -138,21 +148,13 @@ class AccountEntity
     }
 
     /**
-     * @return mixed
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
      * @param null $format
      *
      * @return mixed
      */
     public function getDateCreated($format = null)
     {
-        if (!is_null($format)) {
+        if (! is_null($format)) {
             return $this->dateCreated->format($format);
         }
         return $this->dateCreated;
@@ -165,10 +167,18 @@ class AccountEntity
      */
     public function getDateUpdated($format = null)
     {
-        if (!is_null($format)) {
+        if (! is_null($format)) {
             return $this->dateUpdated->format($format);
         }
         return $this->dateUpdated;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**
@@ -185,9 +195,9 @@ class AccountEntity
     /**
      * @return mixed
      */
-    public function getStatus()
+    public function getIsActivated()
     {
-        return $this->status;
+        return $this->isActivated;
     }
 
     /**
@@ -204,9 +214,9 @@ class AccountEntity
     /**
      * @return mixed
      */
-    public function getIsActivated()
+    public function getActivateToken()
     {
-        return $this->isActivated;
+        return $this->activateToken;
     }
 
     /**
@@ -221,11 +231,11 @@ class AccountEntity
     }
 
     /**
-     * @return mixed
+     * @return AccountRoleEntity|null
      */
-    public function getActivateToken()
+    public function getAccountRole()
     {
-        return $this->activateToken;
+        return $this->accountRole;
     }
 
     /**
@@ -240,34 +250,26 @@ class AccountEntity
     }
 
     /**
-     * @return mixed
-     */
-    public function getAccountRole()
-    {
-        return $this->accountRole;
-    }
-
-    /**
-     * @return $this
-     * @throws \Exception
-     */
-    public function setTimeStampLastActive()
-    {
-        $this->timeStampLastActive = new \DateTime('now');
-        return $this;
-    }
-
-    /**
      * @param null $format
      *
      * @return mixed
      */
     public function getTimeStampLastActive($format = null)
     {
-        if (!is_null($format)) {
+        if (! is_null($format)) {
             return $this->timeStampLastActive->format($format);
         }
         return $this->timeStampLastActive;
+    }
+
+    /**
+     * @return $this
+     * @throws Exception
+     */
+    public function setTimeStampLastActive()
+    {
+        $this->timeStampLastActive = new DateTime('now');
+        return $this;
     }
 
     /**
@@ -308,34 +310,10 @@ class AccountEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $arrayCollection
-     *
-     * @return AccountEntity
-     */
-    public function setAccountOption(ArrayCollection $arrayCollection)
-    {
-        return $this->addAccountOption($arrayCollection);
-    }
-
-    /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $arrayCollection
-     *
-     * @return $this
-     */
-    public function addAccountOption(ArrayCollection $arrayCollection)
-    {
-        foreach ($arrayCollection as $item) {
-            $item->setAccount($this);
-        }
-        $this->accountOption = $arrayCollection;
-        return $this;
-    }
-
-    /**
      * @param null $optionKey
      * @param bool $returnObject
      *
-     * @return array|\Doctrine\ORM\PersistentCollection|mixed
+     * @return array|PersistentCollection|mixed
      */
     public function getAccountOption($optionKey = null, $returnObject = false)
     {
@@ -357,6 +335,30 @@ class AccountEntity
             }
         }
         return [];
+    }
+
+    /**
+     * @param ArrayCollection $arrayCollection
+     *
+     * @return AccountEntity
+     */
+    public function setAccountOption(ArrayCollection $arrayCollection)
+    {
+        return $this->addAccountOption($arrayCollection);
+    }
+
+    /**
+     * @param ArrayCollection $arrayCollection
+     *
+     * @return $this
+     */
+    public function addAccountOption(ArrayCollection $arrayCollection)
+    {
+        foreach ($arrayCollection as $item) {
+            $item->setAccount($this);
+        }
+        $this->accountOption = $arrayCollection;
+        return $this;
     }
 
     /**
@@ -467,7 +469,7 @@ class AccountEntity
      */
     public function onPrePersist()
     {
-        $this->dateCreated = $this->dateUpdated = new \DateTime("now");
+        $this->dateCreated = $this->dateUpdated = new DateTime("now");
     }
 
     /**
@@ -477,6 +479,6 @@ class AccountEntity
      */
     public function onPreUpdate()
     {
-        $this->dateUpdated = new \DateTime("now");
+        $this->dateUpdated = new DateTime("now");
     }
 }

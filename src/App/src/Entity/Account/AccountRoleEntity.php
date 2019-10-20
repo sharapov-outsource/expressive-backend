@@ -7,8 +7,12 @@
  * Time: 22:14
  */
 
+declare(strict_types=1);
+
 namespace App\Entity\Account;
 
+use App\Doctrine\Entity\EntityHalMapperInterface;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -47,7 +51,7 @@ class AccountRoleEntity
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -57,7 +61,7 @@ class AccountRoleEntity
      *
      * @return $this
      */
-    public function setKey($key)
+    public function setKey($key): AccountRoleEntity
     {
         $this->roleKey = $key;
         return $this;
@@ -66,7 +70,7 @@ class AccountRoleEntity
     /**
      * @return mixed
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->roleKey;
     }
@@ -76,7 +80,7 @@ class AccountRoleEntity
      *
      * @return $this
      */
-    public function setTitle($value)
+    public function setTitle($value): AccountRoleEntity
     {
         $this->roleTitle = $value;
         return $this;
@@ -85,7 +89,7 @@ class AccountRoleEntity
     /**
      * @return mixed
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->roleTitle;
     }
@@ -107,22 +111,22 @@ class AccountRoleEntity
     }
 
     /**
+     * @return mixed
+     */
+    public function getStatus(): bool
+    {
+        return $this->status;
+    }
+
+    /**
      * @param $status
      *
      * @return $this
      */
-    public function setStatus($status)
+    public function setStatus($status): AccountRoleEntity
     {
         $this->status = (bool)$status;
         return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStatus()
-    {
-        return $this->status;
     }
 
     /**
@@ -133,7 +137,7 @@ class AccountRoleEntity
     public function onPrePersist()
     {
         $this->dateCreated
-            = $this->dateUpdated = new \DateTime("now");
+            = $this->dateUpdated = new DateTime("now");
     }
 
     /**
@@ -143,7 +147,7 @@ class AccountRoleEntity
      */
     public function onPreUpdate()
     {
-        $this->dateUpdated = new \DateTime("now");
+        $this->dateUpdated = new DateTime("now");
     }
 
     private function __clone()

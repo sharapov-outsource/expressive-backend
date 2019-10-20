@@ -36,10 +36,11 @@ class DoctrineFactory
      *
      * @return EntityManager
      * @throws ORMException
+     * @throws RuntimeException
      */
     public function __invoke(ContainerInterface $container): EntityManager
     {
-        if (!$container->has('config')) {
+        if (! $container->has('config')) {
             throw new RuntimeException('No configuration files provided');
         }
         /** @var Dot $config */
@@ -80,9 +81,11 @@ class DoctrineFactory
                     ->getConnection()
                     ->getSchemaManager()
                     ->getDatabasePlatform();
-                foreach ($config->get('doctrine.connection.orm_app.doctrine_type_mappings')
-                as
-                    $dbType => $doctrineType) {
+                foreach (
+                    $config->get('doctrine.connection.orm_app.doctrine_type_mappings')
+                    as
+                    $dbType => $doctrineType
+                ) {
                     $dbPlatform
                         ->registerDoctrineTypeMapping($dbType, $doctrineType);
                 }

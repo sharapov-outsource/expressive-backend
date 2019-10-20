@@ -19,6 +19,14 @@ trait RouterTrait
     private $router;
 
     /**
+     * @return RouterInterface
+     */
+    public function getRouter()
+    {
+        return $this->router;
+    }
+
+    /**
      * @param RouterInterface $router
      *
      * @return $this
@@ -27,13 +35,5 @@ trait RouterTrait
     {
         $this->router = $router;
         return $this;
-    }
-
-    /**
-     * @return RouterInterface
-     */
-    public function getRouter()
-    {
-        return $this->router;
     }
 }

@@ -62,7 +62,7 @@ class AccountOptionEntity
     {
         $this->setIsRequired(0);
         $this->setReadOnly(0);
-        if (!is_null($type) and !is_null($key)) {
+        if (! is_null($type) and ! is_null($key)) {
             $this->setOptionTypeKey($type);
             $this->setOptionKey($key);
             $this->setOptionValue($value);
@@ -78,6 +78,14 @@ class AccountOptionEntity
     }
 
     /**
+     * @return mixed
+     */
+    public function getIsRequired()
+    {
+        return $this->isRequired;
+    }
+
+    /**
      * @param $value
      *
      * @return $this
@@ -86,14 +94,6 @@ class AccountOptionEntity
     {
         $this->isRequired = (bool)$value;
         return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIsRequired()
-    {
-        return $this->isRequired;
     }
 
     /**
@@ -145,17 +145,6 @@ class AccountOptionEntity
     }
 
     /**
-     * @param $value
-     *
-     * @return $this
-     */
-    public function setOptionValue($value)
-    {
-        $this->optionValue = $value;
-        return $this;
-    }
-
-    /**
      * @return mixed
      */
     public function getOptionValue()
@@ -164,19 +153,13 @@ class AccountOptionEntity
     }
 
     /**
-     * @param $key
      * @param $value
-     * @param $isRequired
-     * @param $readOnly
      *
      * @return $this
      */
-    private function setOption($key, $value, $isRequired, $readOnly)
+    public function setOptionValue($value)
     {
-        $this->setOptionKey($key);
-        $this->setOptionValue($value);
-        $this->setIsRequired($isRequired);
-        $this->setReadOnly($readOnly);
+        $this->optionValue = $value;
         return $this;
     }
 
@@ -196,6 +179,23 @@ class AccountOptionEntity
     ) {
         $this->setOptionTypeKey(self::OPTION_TYPE_PERSONAL);
         $this->setOption($key, $value, $isRequired, $readOnly);
+        return $this;
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @param $isRequired
+     * @param $readOnly
+     *
+     * @return $this
+     */
+    private function setOption($key, $value, $isRequired, $readOnly)
+    {
+        $this->setOptionKey($key);
+        $this->setOptionValue($value);
+        $this->setIsRequired($isRequired);
+        $this->setReadOnly($readOnly);
         return $this;
     }
 
@@ -238,6 +238,14 @@ class AccountOptionEntity
     }
 
     /**
+     * @return mixed
+     */
+    public function getReadOnly()
+    {
+        return $this->readOnly;
+    }
+
+    /**
      * @param $status
      *
      * @return $this
@@ -251,9 +259,9 @@ class AccountOptionEntity
     /**
      * @return mixed
      */
-    public function getReadOnly()
+    public function getAccount()
     {
-        return $this->readOnly;
+        return $this->account;
     }
 
     /**
@@ -265,13 +273,5 @@ class AccountOptionEntity
     {
         $this->account = $account;
         return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAccount()
-    {
-        return $this->account;
     }
 }
