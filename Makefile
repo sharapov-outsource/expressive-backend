@@ -2,4 +2,58 @@
 $(shell touch .env)
 include .env
 
+# Project variables
+PROJECT_NAME ?= ExpressiveBackend
+ORG_NAME ?= ExpressiveBackend
 
+# Release settings
+export HTTP_PORT ?= 80
+export API_PORT ?= 8000
+export MYSQL_PORT ?= 3306
+export DB_NAME ?= dev
+export DB_USER ?= dev
+export DB_PASSWORD ?= dev
+export BUILD_ID ?=
+
+include Makefile.settings
+
+version:
+	@ echo '{"Version": "$(APP_VERSION)"}'
+
+status:
+	${INFO} "Getting container status..."
+	@ docker ps | grep $(PROJECT_NAME)
+
+clean%test:
+	${INFO} "Destroying test environment..."
+	@ docker-compose $(TEST_ARGS) down -v || true
+
+test:
+	${INFO} "Building images..."
+	@ docker-compose $(TEST_ARGS) build $(NOPULL_FLAG) php
+#
+	${INFO} "Starting database..."
+	@ docker-compose $(TEST_ARGS) up -d database
+	${INFO} "Start database health check service..."
+	@ $(call check_exit_code,$(TEST_ARGS),database)
+#
+	${INFO} "Starting phpmyadmin..."
+	@ docker-compose $(TEST_ARGS) up -d pma
+	${INFO} "Start phpmyadmin health check service..."
+	@ $(call check_exit_code,$(TEST_ARGS),pma)
+#
+	${INFO} "Starting webapi service..."
+	@ docker-compose $(TEST_ARGS) up -d webapi
+	${INFO} "Start webapi health check service..."
+	@ $(call check_exit_code,$(TEST_ARGS),webapi)
+#
+	${INFO} "Starting composer service..."
+	@ docker-compose $(TEST_ARGS) up -d composer
+
+	${INFO} "Testing environment was created successfully"
+	${INFO} "WebAPI running at           http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),webapi,$(HTTP_PORT))"
+	${INFO} "Database running at         http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),database,$(MYSQL_PORT))"
+	${INFO} "Database manager running at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),pma,$(HTTP_PORT))"
+	${INFO} "Testing complete"
+
+testing: clean-test test

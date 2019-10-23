@@ -1,0 +1,84 @@
+version: '3'
+services:
+  webapi:
+    image: nginx:alpine
+    container_name: ${TEST_PROJECT}_webapi_container
+    volumes:
+      - ../../docker/test/default.conf:/etc/nginx/conf.d/default.conf
+      - ../../etc/ssl:/etc/ssl
+      - ../../etc/log:/var/log/nginx
+      - ../../html:/var/www/html
+    ports:
+      - 8000:80
+      - 4443:443
+    restart: always
+    depends_on:
+      - php
+      - database
+    networks:
+      - backend
+      - frontend
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile.php-fpm
+    container_name: ${TEST_PROJECT}_php_container
+    restart: always
+    volumes:
+      - ../../:/var/www
+      - ../../docker/test/php.ini:/usr/local/etc/php/conf.d/php.ini
+      - ../../etc/tmp:/tmp
+      - ../../etc/log:/var/log
+    depends_on:
+      - database
+    networks:
+      - backend
+  pma:
+    image: phpmyadmin/phpmyadmin
+    container_name: ${TEST_PROJECT}_pma_container
+    ports:
+      - 8080:80
+    environment:
+#      - PMA_ARBITRARY=1
+      - PMA_HOSTS=database
+      - PMA_USER=dev
+      - PMA_PASSWORD=dev
+    restart: always
+    depends_on:
+      - database
+    volumes:
+      - /sessions
+    links:
+      - database:database
+    networks:
+      - backend
+  composer:
+    image: prooph/composer:7.2
+    container_name: ${TEST_PROJECT}_composer_container
+    volumes:
+      - ../../:/var/www
+    working_dir: /var/www
+    command: install
+    networks:
+      - backend
+  database:
+    image: mysql:8.0.18
+    container_name: ${TEST_PROJECT}_database_container
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+    ports:
+      - 8919:3306
+    volumes:
+      - database:/var/lib/mysql
+    networks:
+      - backend
+networks:
+  backend:
+  frontend:
+
+volumes:
+  database:

@@ -13,7 +13,7 @@ return [
         'connection' => [
             'orm_app' => [
                 'params' => [
-                    'host'     => 'backend_expressive_database_container',
+                    'host'     => 'database',
                     'port'     => '3306',
                     'user'     => 'dev',
                     'password' => 'dev',
