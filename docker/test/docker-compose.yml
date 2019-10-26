@@ -10,19 +10,19 @@ services:
       - ../../html:/var/www/html
     ports:
       - 8000:80
-      - 4443:443
+      - 4433:443
     restart: always
     depends_on:
-      - php
-      - database
+      - phpfpm
+      - mysql8
     networks:
       - backend
       - frontend
-  php:
+  phpfpm:
     build:
       context: .
-      dockerfile: Dockerfile.php-fpm
-    container_name: ${TEST_PROJECT}_php_container
+      dockerfile: Dockerfile.phpfpm
+    container_name: ${TEST_PROJECT}_phpfpm_container
     restart: always
     volumes:
       - ../../:/var/www
@@ -30,26 +30,26 @@ services:
       - ../../etc/tmp:/tmp
       - ../../etc/log:/var/log
     depends_on:
-      - database
+      - mysql8
     networks:
       - backend
-  pma:
+  phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: ${TEST_PROJECT}_pma_container
+    container_name: ${TEST_PROJECT}_phpmyadmin_container
     ports:
       - 8080:80
     environment:
 #      - PMA_ARBITRARY=1
-      - PMA_HOSTS=database
+      - PMA_HOSTS=mysql8
       - PMA_USER=dev
       - PMA_PASSWORD=dev
     restart: always
     depends_on:
-      - database
+      - mysql8
     volumes:
       - /sessions
     links:
-      - database:database
+      - mysql8:mysql8
     networks:
       - backend
   composer:
@@ -61,10 +61,13 @@ services:
     command: install
     networks:
       - backend
-  database:
-    image: mysql:8.0.18
-    container_name: ${TEST_PROJECT}_database_container
+  mysql8:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql8
+    container_name: ${TEST_PROJECT}_mysql8_container
     restart: always
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
@@ -73,7 +76,7 @@ services:
     ports:
       - 8919:3306
     volumes:
-      - database:/var/lib/mysql
+      - mysql8:/var/lib/mysql
     networks:
       - backend
 networks:
@@ -81,4 +84,4 @@ networks:
   frontend:
 
 volumes:
-  database:
+  mysql8:

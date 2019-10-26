@@ -1,0 +1,2 @@
+FROM mysql:8.0.18
+HEALTHCHECK --interval=10s --retries=10 CMD mysqlshow -u ${MYSQL_USER} -p${MYSQL_PASSWORD}

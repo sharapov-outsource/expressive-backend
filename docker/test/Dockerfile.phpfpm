@@ -52,10 +52,7 @@ RUN apt-get update && apt-get upgrade -y \
         mbstring \
         mysqli \
         pdo_mysql \
-        pdo_pgsql \
-        pdo_sqlite \
         phar \
-        pgsql \
         readline \
         soap \
         sockets \
@@ -66,7 +63,6 @@ RUN apt-get update && apt-get upgrade -y \
         xsl \
         zip \
     && pecl install xdebug && docker-php-ext-enable xdebug \
-    && pecl install mongodb && docker-php-ext-enable mongodb \
     && pecl install redis && docker-php-ext-enable redis \
     && yes '' | pecl install imagick && docker-php-ext-enable imagick \
     && docker-php-source delete \
@@ -74,3 +70,5 @@ RUN apt-get update && apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/www
+
+HEALTHCHECK --start-period=60s --interval=12s --timeout=12s --retries=5 CMD [ "204" = "$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/healthcheck)" ] || exit 1
