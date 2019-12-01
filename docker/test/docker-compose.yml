@@ -1,20 +1,22 @@
 version: '3'
 services:
   webapi:
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.webapi
     container_name: ${TEST_PROJECT}_webapi_container
     volumes:
-      - ../../docker/test/default.conf:/etc/nginx/conf.d/default.conf
       - ../../etc/ssl:/etc/ssl
       - ../../etc/log:/var/log/nginx
       - ../../html:/var/www/html
+      - ../../docker/socket:/socket
     ports:
-      - 8000:80
-      - 4433:443
+      - 8000:8000
+      - 4433:4433
     restart: always
     depends_on:
       - phpfpm
-      - mysql8
+   #   - mysql8
     networks:
       - backend
       - frontend
@@ -26,59 +28,14 @@ services:
     restart: always
     volumes:
       - ../../:/var/www
-      - ../../docker/test/php.ini:/usr/local/etc/php/conf.d/php.ini
       - ../../etc/tmp:/tmp
       - ../../etc/log:/var/log
-    depends_on:
-      - mysql8
+      - ../../docker/socket:/socket
+    #depends_on:
+     # - mysql8
     networks:
       - backend
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: ${TEST_PROJECT}_phpmyadmin_container
-    ports:
-      - 8080:80
-    environment:
-#      - PMA_ARBITRARY=1
-      - PMA_HOSTS=mysql8
-      - PMA_USER=dev
-      - PMA_PASSWORD=dev
-    restart: always
-    depends_on:
-      - mysql8
-    volumes:
-      - /sessions
-    links:
-      - mysql8:mysql8
-    networks:
-      - backend
-  composer:
-    image: prooph/composer:7.2
-    container_name: ${TEST_PROJECT}_composer_container
-    volumes:
-      - ../../:/var/www
-    working_dir: /var/www
-    command: install
-    networks:
-      - backend
-  mysql8:
-    build:
-      context: .
-      dockerfile: Dockerfile.mysql8
-    container_name: ${TEST_PROJECT}_mysql8_container
-    restart: always
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
-    ports:
-      - 8919:3306
-    volumes:
-      - mysql8:/var/lib/mysql
-    networks:
-      - backend
+
 networks:
   backend:
   frontend:

@@ -1,0 +1,13 @@
+FROM nginx:alpine
+
+RUN addgroup -g 1000 -S bexpr && adduser -H -D -u 1000 -h /var/cache/nginx -G bexpr bexpr
+
+COPY default.conf /etc/nginx/nginx.conf
+
+RUN touch /var/run/nginx.pid \
+ && chown -Rf bexpr:bexpr \
+    /var/run/nginx.pid \
+    /var/cache/nginx \
+    /var/log/nginx
+
+USER bexpr
