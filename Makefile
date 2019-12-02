@@ -7,8 +7,8 @@ PROJECT_NAME ?= ExpressiveBackend
 ORG_NAME ?= ExpressiveBackend
 
 # Release settings
-export HTTP_PORT ?= 8000
-export HTTPS_PORT ?= 4433
+export HTTP_PORT ?= 80
+export HTTPS_PORT ?= 443
 export API_PORT ?= 8000
 export MYSQL_PORT ?= 3306
 export DB_NAME ?= dev
@@ -31,31 +31,30 @@ clean%test:
 
 test:
 	${INFO} "Building images..."
-	@ docker-compose $(TEST_ARGS) build $(NOPULL_FLAG) webapi phpfpm
-	# mysql8
+	@ docker-compose $(TEST_ARGS) build $(NOPULL_FLAG) webapi phpfpm mysql8
 #
-#	${INFO} "Starting MySQL8..."
-#	@ docker-compose $(TEST_ARGS) up -d mysql8
-#	${INFO} "Start MySQL8 health check service..."
-#	@ $(call check_exit_code,$(TEST_ARGS),database)
+	${INFO} "Starting MySQL8..."
+	@ docker-compose $(TEST_ARGS) up -d mysql8
+	${INFO} "Start MySQL8 health check service..."
+	@ $(call check_exit_code,$(TEST_ARGS),database)
 #
-#	${INFO} "Starting PhpMyAdmin..."
-#	@ docker-compose $(TEST_ARGS) up -d phpmyadmin
-#	${INFO} "Start PhpMyAdmin health check service..."
-#	@ $(call check_exit_code,$(TEST_ARGS),phpmyadmin)
+	${INFO} "Starting PhpMyAdmin..."
+	@ docker-compose $(TEST_ARGS) up -d phpmyadmin
+	${INFO} "Start PhpMyAdmin health check service..."
+	@ $(call check_exit_code,$(TEST_ARGS),phpmyadmin)
 #
 	${INFO} "Starting WebAPI service..."
 	@ docker-compose $(TEST_ARGS) up -d webapi
 	${INFO} "Start WebAPI health check service..."
 	@ $(call check_exit_code,$(TEST_ARGS),webapi)
 #
-#	${INFO} "Starting composer service..."
-#	@ docker-compose $(TEST_ARGS) up -d composer
+	${INFO} "Starting composer service..."
+	@ docker-compose $(TEST_ARGS) up -d composer
 
 	${INFO} "Testing environment was created successfully"
-	${INFO} "WebAPI running at     http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),webapi,$(HTTP_PORT)) and https://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),webapi,$(HTTPS_PORT))"
-#	${INFO} "MySQL8 running at     http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),mysql8,$(MYSQL_PORT))"
-#	${INFO} "PhpMyAdmin running at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),phpmyadmin,$(HTTP_PORT))"
+	${INFO} "WebAPI running at     http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),webapi,$(API_PORT)) and https://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),webapi,$(HTTPS_PORT))"
+	${INFO} "MySQL8 running at     http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),mysql8,$(MYSQL_PORT))"
+	${INFO} "PhpMyAdmin running at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),phpmyadmin,$(HTTP_PORT))"
 	${INFO} "Testing complete"
 
 testing: clean-test test

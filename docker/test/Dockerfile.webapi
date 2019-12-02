@@ -1,5 +1,7 @@
 FROM nginx:alpine
 
+LABEL maintainer="Sharapov A. <alexander@sharapov.biz>"
+
 RUN addgroup -g 1000 -S bexpr && adduser -H -D -u 1000 -h /var/cache/nginx -G bexpr bexpr
 
 COPY default.conf /etc/nginx/nginx.conf
@@ -11,3 +13,5 @@ RUN touch /var/run/nginx.pid \
     /var/log/nginx
 
 USER bexpr
+
+HEALTHCHECK --interval=5s --timeout=5s --retries=5 CMD [ "200" = "$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/)" ] || exit 1

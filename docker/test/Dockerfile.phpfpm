@@ -7,12 +7,13 @@ RUN adduser --uid 1000 --gid 1000 bexpr
 
 COPY php-pool.conf /usr/local/etc/php-fpm.d/www.conf
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
+RUN rm /usr/local/etc/php-fpm.d/zz-docker.conf
 
 USER bexpr
 
-CMD ["php-fpm"]
+CMD ["php-fpm", "--nodaemonize"]
 
 WORKDIR /var/www
 
-# check if response header returns 204 code OR die
-HEALTHCHECK --interval=5s --timeout=5s --retries=5 CMD [ "204" = "$(curl -s -o /dev/null -w "%{http_code}" http://localhost/api/ping)" ] || exit 1
+# check if response header returns 200 code OR die
+HEALTHCHECK --interval=5s --timeout=5s --retries=5 CMD [ "200" = "$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/api/ping)" ] || exit 1
