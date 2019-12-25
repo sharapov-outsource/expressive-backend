@@ -12,6 +12,10 @@ RUN touch /var/run/nginx.pid \
     /var/cache/nginx \
     /var/log/nginx
 
+RUN apk add --no-cache curl
+
 USER bexpr
 
-HEALTHCHECK --interval=5s --timeout=5s --retries=5 CMD [ "200" = "$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/)" ] || exit 1
+EXPOSE 8000
+
+HEALTHCHECK --interval=5s --timeout=5s --retries=5 CMD [ "200" = "$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3423/api/ping)" ] || exit 1

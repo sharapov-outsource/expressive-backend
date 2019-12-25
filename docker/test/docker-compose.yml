@@ -26,8 +26,8 @@ services:
       - ../../html:/var/www/html
       - ../../docker/socket:/socket
     ports:
-      - 8000:8000
-      - 4433:4433
+      - 8000:3423
+      - 4443:4235
     restart: always
     depends_on:
       - phpfpm

@@ -9,7 +9,8 @@ ORG_NAME ?= ExpressiveBackend
 # Release settings
 export HTTP_PORT ?= 80
 export HTTPS_PORT ?= 443
-export API_PORT ?= 8000
+export API_SSL_PORT ?= 4235
+export API_REG_PORT ?= 3423
 export MYSQL_PORT ?= 3306
 export DB_NAME ?= dev
 export DB_USER ?= dev
@@ -52,7 +53,7 @@ test:
 	@ docker-compose $(TEST_ARGS) up -d composer
 
 	${INFO} "Testing environment was created successfully"
-	${INFO} "WebAPI running at     http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),webapi,$(API_PORT)) and https://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),webapi,$(HTTPS_PORT))"
+	${INFO} "WebAPI running at     http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),webapi,$(API_REG_PORT)) and https://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),webapi,$(API_SSL_PORT))"
 	${INFO} "MySQL8 running at     http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),mysql8,$(MYSQL_PORT))"
 	${INFO} "PhpMyAdmin running at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),phpmyadmin,$(HTTP_PORT))"
 	${INFO} "Testing complete"
