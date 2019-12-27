@@ -41,7 +41,7 @@ EOT;
      */
     protected function configure(): void
     {
-        $this->setDescription('In-app caching functionality');
+        $this->setDescription('Managing in-app caching functionality');
         $this->setHelp(self::HELP);
         $this->addArgument(
             'action',
@@ -59,11 +59,11 @@ EOT;
     {
         $config = $this->getConfig(realpath(getcwd()));
 
-        if (!isset($config['config_cache_path'])) {
+        if (! isset($config['config_cache_path'])) {
             throw new RuntimeException(self::CONFIG_PATH_NOT_FOUND);
         }
 
-        if (!file_exists($config['config_cache_path'])) {
+        if (! file_exists($config['config_cache_path'])) {
             throw new RuntimeException(
                 sprintf(self::CONFIG_FILE_NOT_EXISTS, $config['config_cache_path'])
             );
@@ -75,7 +75,8 @@ EOT;
             );
         }
 
-        $output->writeln(sprintf('<info>%s</info>',
+        $output->writeln(sprintf(
+            '<info>%s</info>',
             sprintf(self::CONFIG_REMOVED, $config['config_cache_path'])
         ));
 

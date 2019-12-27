@@ -17,8 +17,10 @@ use Zend\Expressive\Router\RouterInterface;
 
 class HomePageHandlerFactory
 {
-    public function __invoke(ContainerInterface $container
-    ): RequestHandlerInterface {
+    public function __invoke(
+        ContainerInterface $container
+    ): RequestHandlerInterface
+    {
         return new HomePageHandler($container->get(RouterInterface::class));
     }
 }

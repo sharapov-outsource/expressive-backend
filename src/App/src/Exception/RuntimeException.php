@@ -14,8 +14,7 @@ use DomainException;
 use Zend\ProblemDetails\Exception\CommonProblemDetailsExceptionTrait;
 use Zend\ProblemDetails\Exception\ProblemDetailsExceptionInterface;
 
-class RuntimeException extends DomainException
-    implements ProblemDetailsExceptionInterface
+class RuntimeException extends DomainException implements ProblemDetailsExceptionInterface
 {
     use CommonProblemDetailsExceptionTrait;
 

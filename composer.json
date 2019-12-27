@@ -2,7 +2,7 @@
   "name": "sharapov/backend-expressive-skeleton",
   "description": "Backend expressive skeleton based on zend-expressive. Begin developing PSR-15 middleware applications in seconds!",
   "type": "project",
-  "homepage": "https://github.com/sharapov-outsource/backend-expressive-skeleton",
+  "homepage": "https://github.com/sharapov-outsource/backend-expressive",
   "license": "BSD-3-Clause",
   "keywords": [
     "skeleton",
@@ -81,6 +81,7 @@
     "development-enable": "zf-development-mode enable",
     "development-status": "zf-development-mode status",
     "expressive": "expressive --ansi",
+    "bixpressive": "bin/bixpressive --ansi",
     "check": [
       "@cs-check",
       "@test"
@@ -89,12 +90,10 @@
       "@db:init-schema",
       "@db:load-fixtures"
     ],
-    "clear-config-cache": "php bin/clear-config-cache.php",
-    "db:init-schema": "docker exec expressive_backend_phpfpm_container /bin/sh -c 'php /var/www/vendor/bin/doctrine orm:schema-tool:update --force'",
-    "db:load-fixtures": "docker exec expressive_backend_phpfpm_container /bin/sh -c 'php bin/db-load-fixtures.php'",
+    "cache-clear": "bin/bixpressive cache clear",
     "cs-check": "phpcs",
     "cs-fix": "phpcbf",
-    "serve": "php -S 0.0.0.0:8080 -t html/",
+    "serve": "php -S 0.0.0.0:8081 -t html/",
     "test": "phpunit --colors=always",
     "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
   }

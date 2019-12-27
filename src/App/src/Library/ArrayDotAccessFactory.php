@@ -17,8 +17,8 @@ class ArrayDotAccessFactory
 {
     public function __invoke(
         ContainerInterface $container
-    ): ArrayDotAccess
-    {
+    ): ArrayDotAccess {
+
         return new ArrayDotAccess(
             $container->get('config')
         );

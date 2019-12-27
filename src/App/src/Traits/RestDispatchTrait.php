@@ -93,7 +93,8 @@ trait RestDispatchTrait
      * @return $this
      */
     public function setResponseFactory(HalResponseFactory $halResponseFactory
-    ): self {
+    ): self
+    {
         $this->responseFactory = $halResponseFactory;
         return $this;
     }
@@ -116,7 +117,8 @@ trait RestDispatchTrait
      * @return $this
      */
     public function setResourceGenerator(ResourceGenerator $resourceGenerator
-    ): self {
+    ): self
+    {
         $this->resourceGenerator = $resourceGenerator;
         return $this;
     }

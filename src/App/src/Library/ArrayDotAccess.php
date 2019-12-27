@@ -111,7 +111,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
             $lastSegment = array_pop($segments);
 
             foreach ($segments as $segment) {
-                if (!isset($items[$segment]) || !is_array($items[$segment])) {
+                if (! isset($items[$segment]) || ! is_array($items[$segment])) {
                     continue 2;
                 }
 
@@ -152,7 +152,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
         }
 
         foreach ($items as $key => $value) {
-            if (is_array($value) && !empty($value)) {
+            if (is_array($value) && ! empty($value)) {
                 $flatten = array_merge(
                     $flatten,
                     $this->flatten($delimiter, $value, $prepend . $key . $delimiter)
@@ -189,7 +189,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
         $items = $this->items;
 
         foreach (explode('.', $key) as $segment) {
-            if (!is_array($items) || !$this->exists($items, $segment)) {
+            if (! is_array($items) || ! $this->exists($items, $segment)) {
                 return $default;
             }
 
@@ -226,7 +226,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
     {
         $keys = (array)$keys;
 
-        if (!$this->items || $keys === []) {
+        if (! $this->items || $keys === []) {
             return false;
         }
 
@@ -238,7 +238,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
             }
 
             foreach (explode('.', $key) as $segment) {
-                if (!is_array($items) || !$this->exists($items, $segment)) {
+                if (! is_array($items) || ! $this->exists($items, $segment)) {
                     return false;
                 }
 
@@ -264,7 +264,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
         $keys = (array)$keys;
 
         foreach ($keys as $key) {
-            if (!empty($this->get($key))) {
+            if (! empty($this->get($key))) {
                 return false;
             }
         }
@@ -450,7 +450,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
         $items = &$this->items;
 
         foreach (explode('.', $keys) as $key) {
-            if (!isset($items[$key]) || !is_array($items[$key])) {
+            if (! isset($items[$key]) || ! is_array($items[$key])) {
                 $items[$key] = [];
             }
 

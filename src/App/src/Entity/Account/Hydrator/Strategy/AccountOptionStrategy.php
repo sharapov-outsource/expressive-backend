@@ -30,9 +30,7 @@ class AccountOptionStrategy extends AbstractCollectionStrategy
         $this->setObject($object);
         $accountOptions = [];
 
-        foreach (
-            $this->getCollectionFromObjectByValue() as $accountOptionEntity
-        ) {
+        foreach ($this->getCollectionFromObjectByValue() as $accountOptionEntity) {
             /** @var AccountOptionEntity $accountOptionEntity */
             $accountOptions[] = [
                 'id'         => $accountOptionEntity->getId(),
