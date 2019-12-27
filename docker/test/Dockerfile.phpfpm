@@ -9,6 +9,8 @@ COPY php-pool.conf /usr/local/etc/php-fpm.d/www.conf
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
 RUN rm /usr/local/etc/php-fpm.d/zz-docker.conf
 
+RUN docker-php-ext-install pdo_mysql
+
 USER bexpr
 
 CMD ["php-fpm", "--nodaemonize"]

@@ -31,7 +31,6 @@ services:
     restart: always
     depends_on:
       - phpfpm
-      - mysql8
     networks:
       - backend
       - frontend
