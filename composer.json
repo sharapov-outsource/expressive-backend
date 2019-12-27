@@ -52,7 +52,7 @@
     "zendframework/zend-hydrator": "^3.0",
     "zendframework/zend-paginator": "^2.5",
     "doctrine/orm": "^2.6",
-    "adbario/php-dot-notation": "^2.0"
+    "ext-json": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0.1",

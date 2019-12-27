@@ -59,3 +59,15 @@ test:
 	${INFO} "Testing complete"
 
 testing: clean-test test
+
+init-test-database:
+	${INFO} "Creating database schema..."
+	@ docker exec -it $(TEST_PROJECT)_phpfpm_container $(ORM_UPDATE_ARG)
+
+init-load-fixtures:
+	${INFO} "Loading database data fixtures..."
+	@ bin/bixpressive clear cache
+
+clear-cache:
+	${INFO} "Clearing in-app cache..."
+	@ bin/bixpressive cache clear

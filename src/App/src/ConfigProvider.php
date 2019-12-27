@@ -9,6 +9,8 @@ use App\Doctrine\DoctrineFactory;
 use App\Entity\Account\AccountEntity;
 use App\Entity\Account\Hydrator\AccountEntityHydratorFactory;
 use App\Handler\HalResource\Account\AccountCollection;
+use App\Library\ArrayDotAccess;
+use App\Library\ArrayDotAccessFactory;
 use Doc\InvalidParameterHandler;
 use Doc\MethodNotAllowedHandler;
 use Doc\OutOfBoundsHandler;
@@ -40,10 +42,10 @@ class ConfigProvider
     public function __invoke(): array
     {
         return [
-            'dependencies'     => $this->getDependencies(),
-            'doctrine'         => $this->getEntities(),
+            'dependencies' => $this->getDependencies(),
+            'doctrine' => $this->getEntities(),
             MetadataMap::class => $this->getHalConfig(),
-            'hydrators'        => [
+            'hydrators' => [
                 'factories' => [
                     AccountEntityHydratorFactory::class => AccountEntityHydratorFactory::class,
                 ],
@@ -60,26 +62,29 @@ class ConfigProvider
             'invokables' => [
                 Handler\PingHandler::class => Handler\PingHandler::class,
             ],
-            'factories'  => [
+            'factories' => [
                 // Doctrine factories
-                'doctrine.entitymanager.orm_app'                  =>
+                'doctrine.entitymanager.orm_app' =>
                     DoctrineFactory::class,
-                DoctrineCache::class                              =>
+                DoctrineCache::class =>
                     DoctrineArrayCacheFactory::class,
                 // Documentation
-                Doc\InvalidParameterHandler::class                => InvokableFactory::class,
-                Doc\MethodNotAllowedHandler::class                => InvokableFactory::class,
-                Doc\OutOfBoundsHandler::class                     => InvokableFactory::class,
-                Doc\ResourceNotFoundHandler::class                => InvokableFactory::class,
-                Doc\RuntimeErrorHandler::class                    => InvokableFactory::class,
+                Doc\InvalidParameterHandler::class => InvokableFactory::class,
+                Doc\MethodNotAllowedHandler::class => InvokableFactory::class,
+                Doc\OutOfBoundsHandler::class => InvokableFactory::class,
+                Doc\ResourceNotFoundHandler::class => InvokableFactory::class,
+                Doc\RuntimeErrorHandler::class => InvokableFactory::class,
                 // Main handlers
-                Handler\HomePageHandler::class                    =>
+                Handler\HomePageHandler::class =>
                     Handler\HomePageHandlerFactory::class,
-                Handler\DbTestHandler::class                      =>
+                Handler\DbTestHandler::class =>
                     Handler\DbTestHandlerFactory::class,
                 // Hal resources
                 Handler\HalResource\Account\AccountHandler::class =>
                     Handler\HalResource\Account\AccountHandlerFactory::class,
+
+                // Service resources
+                ArrayDotAccess::class => ArrayDotAccessFactory::class
             ],
         ];
     }
@@ -90,19 +95,19 @@ class ConfigProvider
     private function getEntities(): array
     {
         return [
-            'driver'     => [
-                'entity_driver'  => [
+            'driver' => [
+                'entity_driver' => [
                     'class' => AnnotationDriver::class,
                     'cache' => 'array',
                     'paths' => [__DIR__ . '/Entity']
                 ],
-                'orm_app'        => [
-                    'class'   => MappingDriverChain::class,
+                'orm_app' => [
+                    'class' => MappingDriverChain::class,
                     'drivers' => [
                         'App\src\Entity' => 'entity_driver'
                     ],
                 ],
-                'proxyDir'       => 'etc/data/EntityProxy',
+                'proxyDir' => 'etc/data/EntityProxy',
                 'proxyNamespace' => 'EntityProxy'
             ],
             'connection' => [
@@ -110,7 +115,7 @@ class ConfigProvider
                     'doctrine_type_mappings' => [
                         'enum' => 'string'
                     ],
-                    'params'                 => [
+                    'params' => [
                         'driverClass' => Driver::class,
                     ]
                 ]
@@ -127,20 +132,20 @@ class ConfigProvider
     {
         return [
             [
-                '__class__'      => RouteBasedResourceMetadata::class,
+                '__class__' => RouteBasedResourceMetadata::class,
                 'resource_class' => AccountEntity::class,
-                'route'          => 'api.accounts.get',
-                'extractor'      => AccountEntityHydratorFactory::class,
+                'route' => 'api.accounts.get',
+                'extractor' => AccountEntityHydratorFactory::class,
                 //ReflectionHydrator::class,
                 //ObjectPropertyHydrator::class
 
                 //'hydrator' => 'User\\Hydrator\\UserProfile',
             ],
             [
-                '__class__'           => RouteBasedCollectionMetadata::class,
-                'collection_class'    => AccountCollection::class,
+                '__class__' => RouteBasedCollectionMetadata::class,
+                'collection_class' => AccountCollection::class,
                 'collection_relation' => 'Account',
-                'route'               => 'api.accounts.get',
+                'route' => 'api.accounts.get',
             ],
             /*
             [

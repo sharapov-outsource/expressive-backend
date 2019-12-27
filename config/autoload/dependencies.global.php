@@ -21,9 +21,6 @@ return [
         // Use 'factories' for services provided by callbacks/factory classes.
         'factories'  => [
             // Fully\Qualified\ClassName::class => Fully\Qualified\FactoryName::class,
-            'dotConfig' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                return new \Adbar\Dot($sm->get('config'));
-            }
         ],
     ],
 ];

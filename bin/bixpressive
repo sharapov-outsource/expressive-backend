@@ -1,0 +1,39 @@
+#!/usr/bin/env php
+<?php
+/**
+ * @copyright Sharapov A. <alexander@sharapov.biz>
+ * @link      http://www.sharapov.biz/
+ * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
+ * Date: 2019-04-10
+ * Time: 22:58
+ */
+
+declare(strict_types=1);
+
+use PackageVersions\Versions;
+use Symfony\Component\Console\Application;
+use App\Tooling;
+
+if (PHP_SAPI !== 'cli') {
+    echo 'bin/bixpressive must be run as a CLI application';
+    exit(1);
+}
+
+chdir(__DIR__ . '/../');
+
+if (!is_dir('vendor')) {
+    fwrite(STDERR, 'Cannot locate autoloader; please run "composer install"' . PHP_EOL);
+    exit(1);
+}
+
+require 'vendor/autoload.php';
+
+$commandList = [
+    new Tooling\Cache('cache'),
+];
+
+$version = strstr(Versions::getVersion('zendframework/zend-expressive-tooling'), '@', true);
+
+$application = new Application('expressive', $version);
+$application->addCommands($commandList);
+$application->run();

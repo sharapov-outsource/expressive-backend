@@ -13,6 +13,7 @@ namespace App\Doctrine;
 
 use Adbar\Dot;
 use App\Doctrine\DBAL\AccountOptionType;
+use App\Library\ArrayDotAccess;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Cache\Cache as DoctrineCache;
 use Doctrine\DBAL\DBALException;
@@ -44,7 +45,7 @@ class DoctrineFactory
             throw new RuntimeException('No configuration files provided');
         }
         /** @var Dot $config */
-        $config = $container->get('dotConfig');
+        $config = $container->get(ArrayDotAccess::class);
 
         // Register abstract layer types
         $this->registerDBAL();

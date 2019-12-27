@@ -13,10 +13,6 @@ use App\Doctrine\DoctrineFactory;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 
-ini_set('display_startup_errors', 1);
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 date_default_timezone_set("UTC"); // Set the default timezone
 
 include 'vendor/autoload.php';
