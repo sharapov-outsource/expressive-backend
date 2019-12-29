@@ -49,9 +49,6 @@ test:
 	${INFO} "Start WebAPI health check service..."
 	@ $(call check_exit_code,$(TEST_ARGS),webapi)
 #
-	${INFO} "Starting composer service..."
-	@ docker-compose $(TEST_ARGS) up -d composer
-
 	${INFO} "Testing environment was created successfully"
 	${INFO} "WebAPI running at     http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),webapi,$(API_REG_PORT)) and https://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),webapi,$(API_SSL_PORT))"
 	${INFO} "MySQL8 running at     http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(TEST_ARGS),mysql8,$(MYSQL_PORT))"
@@ -59,6 +56,14 @@ test:
 	${INFO} "Testing complete"
 
 testing: clean-test test
+
+composer-install:
+	${INFO} "Installing dependencies..."
+	@ docker exec -it $(TEST_PROJECT)_phpfpm_container composer install
+
+composer-update:
+	${INFO} "Updating dependencies..."
+	@ docker exec -it $(TEST_PROJECT)_phpfpm_container composer update
 
 init-test-database:
 	${INFO} "Creating database schema..."
