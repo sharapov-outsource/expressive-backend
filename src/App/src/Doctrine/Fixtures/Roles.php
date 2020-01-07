@@ -13,7 +13,7 @@ namespace App\Doctrine\Fixtures;
 
 use App\Entity\Account;
 use Doctrine\Common\DataFixtures\FixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 class Roles implements FixtureInterface
 {
