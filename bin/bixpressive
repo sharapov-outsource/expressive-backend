@@ -30,6 +30,7 @@ require 'vendor/autoload.php';
 
 $commandList = [
     new Tooling\Cache('cache'),
+    new Tooling\Fixtures('fixtures')
 ];
 
 $version = strstr(Versions::getVersion('zendframework/zend-expressive-tooling'), '@', true);

@@ -44,7 +44,7 @@ class DoctrineFactory
         if (! $container->has('config')) {
             throw new RuntimeException('No configuration files provided');
         }
-        /** @var Dot $config */
+        /** @var ArrayDotAccess $config */
         $config = $container->get(ArrayDotAccess::class);
 
         // Register abstract layer types

@@ -21,7 +21,8 @@ COMMIT_TAG := $(shell echo $$(git tag --points-at HEAD 2>/dev/null))
 export APP_VERSION ?= $(COMMIT_TIMESTAMP).$(COMMIT_ID)$(if $(BUILD_ID),.$(BUILD_ID),)
 
 # App service tools
-ORM_UPDATE_ARG := vendor/bin/doctrine orm:schema-tool:update --force
+APP_ORM_UPDATE_ARG := vendor/bin/doctrine orm:schema-tool:update --force
+APP_BIXPRESSIVE := bin/bixpressive
 
 # Docker host settings
 DOCKER_HOST_IP := $(shell echo $$DOCKER_HOST | awk -F/ '{printf $$3}' | awk -F: '{printf $$1}')

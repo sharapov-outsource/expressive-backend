@@ -74,13 +74,14 @@ class AccountEntity
                 'firstName',
                 'lastName',
                 'birthDate',
+                'gender',
                 'avatar',
             ],
             AccountOptionEntity::OPTION_TYPE_ADDRESS  => [
                 'country',
                 'state',
                 'city',
-                'zipcode',
+                'zipCode',
             ]
         ];
 

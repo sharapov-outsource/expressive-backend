@@ -25,12 +25,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AccountRoleEntity
 {
-    const DEFAULT_ROLE_ADMIN = 'admin';
+    const DEFAULT_ROLE_ADMIN = 'administrator';
     const DEFAULT_ROLE_USER = 'user';
     const DEFAULT_ROLE_DEVELOPER = 'developer';
     const DEFAULT_ROLE_MODERATOR = 'moderator';
     const SORT_BY = 'roleTitle';
     const ORDER_BY = 'ASC';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")

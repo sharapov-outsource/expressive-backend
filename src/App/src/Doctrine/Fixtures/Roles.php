@@ -1,0 +1,40 @@
+<?php
+/**
+ * @copyright Sharapov A. <alexander@sharapov.biz>
+ * @link      http://www.sharapov.biz/
+ * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
+ * Date: 29.12.2019
+ * Time: 23:49
+ */
+
+declare(strict_types=1);
+
+namespace App\Doctrine\Fixtures;
+
+use App\Entity\Account;
+use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+
+class Roles implements FixtureInterface
+{
+    public $roles = [
+        Account\AccountRoleEntity::DEFAULT_ROLE_ADMIN,
+        Account\AccountRoleEntity::DEFAULT_ROLE_DEVELOPER,
+        Account\AccountRoleEntity::DEFAULT_ROLE_MODERATOR,
+        Account\AccountRoleEntity::DEFAULT_ROLE_USER
+    ];
+
+    public function load(ObjectManager $manager)
+    {
+        foreach ($this->roles as $role) {
+            $role = strtolower($role);
+            $userAccountRole = new Account\AccountRoleEntity();
+            $userAccountRole
+                ->setKey($role)
+                ->setTitle(ucfirst($role))
+                ->setStatus(1);
+            $manager->persist($userAccountRole);
+        }
+        $manager->flush();
+    }
+}

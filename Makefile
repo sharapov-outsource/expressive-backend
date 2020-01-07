@@ -67,12 +67,13 @@ composer-update:
 
 init-test-database:
 	${INFO} "Creating database schema..."
-	@ docker exec -it $(TEST_PROJECT)_phpfpm_container $(ORM_UPDATE_ARG)
+	@ docker exec -it $(TEST_PROJECT)_phpfpm_container $(APP_ORM_UPDATE_ARG)
 
-init-load-fixtures:
-	${INFO} "Loading database data fixtures..."
-	@ bin/bixpressive clear cache
+init-test-database-fixtures:
+	@( read -p "This operation will purge all the existing entries in database and load defaults. Are you sure?!? [y/N]: " sure && case "$$sure" in [yY]) true;; *) false;; esac )
+	${INFO} "Loading database fixtures..."
+	@ docker exec -it $(TEST_PROJECT)_phpfpm_container $(APP_BIXPRESSIVE) fixtures load
 
 clear-cache:
 	${INFO} "Clearing in-app cache..."
-	@ bin/bixpressive cache clear
+	@ docker exec -it $(TEST_PROJECT)_phpfpm_container $(APP_BIXPRESSIVE) cache clear
