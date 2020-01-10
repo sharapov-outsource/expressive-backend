@@ -21,9 +21,23 @@ use function in_array;
 
 abstract class EnumType extends DBAL\Types\Type
 {
+    /**
+     * @var string
+     */
     protected $name;
+
+    /**
+     * @var array
+     */
     protected $values = [];
 
+    /**
+     * Get sql query part for ENUM types
+     *
+     * @param array $fieldDeclaration
+     * @param DBAL\Platforms\AbstractPlatform $platform
+     * @return string
+     */
     public function getSQLDeclaration(
         array $fieldDeclaration,
         DBAL\Platforms\AbstractPlatform $platform
@@ -36,6 +50,11 @@ abstract class EnumType extends DBAL\Types\Type
             . $this->name . ")'";
     }
 
+    /**
+     * @param mixed $value
+     * @param DBAL\Platforms\AbstractPlatform $platform
+     * @return mixed
+     */
     public function convertToPHPValue(
         $value,
         DBAL\Platforms\AbstractPlatform $platform
@@ -43,6 +62,11 @@ abstract class EnumType extends DBAL\Types\Type
         return $value;
     }
 
+    /**
+     * @param mixed $value
+     * @param DBAL\Platforms\AbstractPlatform $platform
+     * @return mixed
+     */
     public function convertToDatabaseValue(
         $value,
         DBAL\Platforms\AbstractPlatform $platform
@@ -57,6 +81,9 @@ abstract class EnumType extends DBAL\Types\Type
         return $value;
     }
 
+    /**
+     * @return string
+     */
     public function getName() : string
     {
         return $this->name;

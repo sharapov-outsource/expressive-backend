@@ -16,7 +16,14 @@ use App\Entity\Account\AccountOptionEntity;
 
 class AccountOptionType extends EnumType
 {
+    /**
+     * @var string
+     */
     protected $name = 'accountOptionType';
+
+    /**
+     * @var array
+     */
     protected $values
     = [
         AccountOptionEntity::OPTION_TYPE_PERSONAL,

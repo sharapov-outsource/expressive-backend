@@ -26,6 +26,10 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Setup middleware pipeline:
+ *
+ * @param Application $app
+ * @param MiddlewareFactory $factory
+ * @param ContainerInterface $container
  */
 return static function (
     Application $app,
