@@ -1,13 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Sharapov A. <alexander@sharapov.biz>
  * @link      http://www.sharapov.biz/
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
- * Date: 19.10.2019
- * Time: 22:11
+ *     Date: 19.10.2019
+ *     Time: 22:11
  */
-
-declare(strict_types=1);
 
 namespace App\Doctrine\Hydrator\Strategy;
 
@@ -15,8 +16,16 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Inflector\Inflector;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use InvalidArgumentException;
+use Laminas\Hydrator\Strategy\StrategyInterface;
 use ReflectionException;
-use Zend\Hydrator\Strategy\StrategyInterface;
+
+use function get_called_class;
+use function get_class;
+use function is_object;
+use function method_exists;
+use function spl_object_hash;
+use function sprintf;
+use function strcmp;
 
 /**
  * @license MIT
@@ -44,9 +53,7 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
     /**
      * Set the class metadata
      *
-     * @param ClassMetadata $classMetadata
-     *
-     * @return AbstractCollectionStrategy
+     * @return $this
      */
     public function setClassMetadata(ClassMetadata $classMetadata)
     {
@@ -55,7 +62,9 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param mixed $value
+     * @param object|null $object
+     * @return mixed
      */
     public function extract($value, ?object $object = null)
     {
@@ -67,7 +76,6 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
      *
      * @return Collection
      * @throws InvalidArgumentException
-     *
      */
     protected function getCollectionFromObjectByValue()
     {
@@ -102,10 +110,8 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
      * Set the object
      *
      * @param object $object
-     *
-     * @return AbstractCollectionStrategy
+     * @return $this
      * @throws InvalidArgumentException
-     *
      */
     public function setObject($object)
     {
@@ -136,12 +142,11 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
      * Set the name of the collection
      *
      * @param string $collectionName
-     *
-     * @return AbstractCollectionStrategy
+     * @return $this
      */
     public function setCollectionName($collectionName)
     {
-        $this->collectionName = (string)$collectionName;
+        $this->collectionName = (string) $collectionName;
         return $this;
     }
 
@@ -178,7 +183,6 @@ abstract class AbstractCollectionStrategy implements StrategyInterface
      *
      * @param object $a
      * @param object $b
-     *
      * @return int
      */
     protected function compareObjects($a, $b)

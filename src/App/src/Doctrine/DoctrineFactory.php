@@ -1,17 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Sharapov A. <alexander@sharapov.biz>
  * @link      http://www.sharapov.biz/
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
- * Date: 2019-04-28
- * Time: 23:00
+ *     Date: 2019-04-28
+ *     Time: 23:00
  */
-
-declare(strict_types=1);
 
 namespace App\Doctrine;
 
-use Adbar\Dot;
 use App\Doctrine\DBAL\AccountOptionType;
 use App\Library\ArrayDotAccess;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -23,7 +23,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\ORMException;
 use Interop\Container\ContainerInterface;
-use Zend\Expressive\Exception\RuntimeException;
+use Mezzio\Exception\RuntimeException;
 
 /**
  * Class DoctrineFactory
@@ -33,33 +33,29 @@ use Zend\Expressive\Exception\RuntimeException;
 class DoctrineFactory
 {
     /**
-     * @param ContainerInterface $container
-     *
-     * @return EntityManager
      * @throws ORMException
      * @throws RuntimeException
      */
-    public function __invoke(ContainerInterface $container): EntityManager
+    public function __invoke(ContainerInterface $container) : EntityManager
     {
         if (! $container->has('config')) {
             throw new RuntimeException('No configuration files provided');
         }
+
         /** @var ArrayDotAccess $config */
         $config = $container->get(ArrayDotAccess::class);
 
         // Register abstract layer types
         $this->registerDBAL();
 
+        // ORM mapping
+        $this->registerAnnotations();
+
         // Doctrine ORM
         $doctrine = new Configuration();
         $doctrine->setProxyDir($config->get('doctrine.driver.proxyDir'));
         $doctrine->setProxyNamespace($config->get('doctrine.driver.proxyNamespace'));
         $doctrine->setAutoGenerateProxyClasses(true);
-
-        // ORM mapping by Annotation
-        AnnotationRegistry::registerFile(
-            'vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
-        );
 
         $doctrine->setMetadataDriverImpl(
             AnnotationDriver::create($config->get('doctrine.driver.entity_driver.paths'))
@@ -83,8 +79,8 @@ class DoctrineFactory
                     ->getSchemaManager()
                     ->getDatabasePlatform();
                 foreach ($config->get('doctrine.connection.orm_app.doctrine_type_mappings')
-                as
-                    $dbType => $doctrineType) {
+                                as $dbType => $doctrineType
+                ) {
                     $dbPlatform
                         ->registerDoctrineTypeMapping($dbType, $doctrineType);
                 }
@@ -100,12 +96,22 @@ class DoctrineFactory
      *
      * @throws ORMException
      */
-    private function registerDBAL(): void
+    private function registerDBAL() : void
     {
         try {
             DBALtype::addType('accountOptionType', AccountOptionType::class);
         } catch (DBALException $e) {
             throw new ORMException($e->getMessage());
         }
+    }
+
+    /**
+     * TODO: rebuild since doctrine/annotations 2.0 once will be released
+     */
+    private function registerAnnotations() : void
+    {
+        AnnotationRegistry::registerFile(
+            'vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
+        );
     }
 }

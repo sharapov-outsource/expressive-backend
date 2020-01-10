@@ -1,18 +1,19 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Sharapov A. <alexander@sharapov.biz>
  * @link      http://www.sharapov.biz/
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
- * Date: 2019-04-10
- * Time: 22:58
+ *     Date: 2019-04-10
+ *     Time: 22:58
  */
 
-declare(strict_types=1);
-
+use Mezzio\Application;
+use Mezzio\Helper\BodyParams\BodyParamsMiddleware;
+use Mezzio\MiddlewareFactory;
 use Psr\Container\ContainerInterface;
-use Zend\Expressive\Application;
-use Zend\Expressive\Helper\BodyParams\BodyParamsMiddleware;
-use Zend\Expressive\MiddlewareFactory;
 
 /**
  * Setup routes with a single request method:
@@ -36,22 +37,22 @@ use Zend\Expressive\MiddlewareFactory;
  * $app->route(
  *     '/contact',
  *     App\Handler\ContactHandler::class,
- *     Zend\Expressive\Router\Route::HTTP_METHOD_ANY,
+ *     Mezzio\Router\Route::HTTP_METHOD_ANY,
  *     'contact'
  * );
  */
-return function (
+return static function (
     Application $app,
     MiddlewareFactory $factory,
     ContainerInterface $container
-): void {
+) : void {
     $app->get('/', App\Handler\HomePageHandler::class, 'home');
     $app->get('/db-test', App\Handler\DbTestHandler::class, 'db');
 
     // Account resources
     $app->get('/api/accounts[/{id}]', [
         BodyParamsMiddleware::class,
-        App\Handler\HalResource\Account\AccountHandler::class
+        App\Handler\HalResource\Account\AccountHandler::class,
     ], 'api.accounts.get');
 
     // Documentation

@@ -70,7 +70,7 @@ init-test-database:
 	@ docker exec -it $(TEST_PROJECT)_phpfpm_container $(APP_ORM_UPDATE_ARG)
 
 init-test-database-fixtures:
-	@( read -p "This operation will purge all the existing entries in database and load defaults. Are you sure?!? [y/N]: " sure && case "$$sure" in [yY]) true;; *) false;; esac )
+	#@( read -p "This operation will purge all the existing entries in database and load defaults. Are you sure?!? [y/N]: " sure && case "$$sure" in [yY]) true;; *) false;; esac )
 	${INFO} "Loading database fixtures..."
 	@ docker exec -it $(TEST_PROJECT)_phpfpm_container $(APP_BIXPRESSIVE) fixtures load
 

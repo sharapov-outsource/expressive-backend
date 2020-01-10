@@ -1,25 +1,25 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Sharapov A. <alexander@sharapov.biz>
  * @link      http://www.sharapov.biz/
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
- * Date: 2019-04-28
- * Time: 22:14
+ *     Date: 2019-04-28
+ *     Time: 22:14
  */
-
-declare(strict_types=1);
 
 namespace App\Entity\Account;
 
-use App\Doctrine\Entity\EntityHalMapperInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="AccountRole",
- * indexes={
- *   @ORM\Index(name="roleKey", columns={"roleKey"})
- * })
+ *     indexes={
+ *     @ORM\Index(name="roleKey", columns={"roleKey"})
+ *     })
  * @ORM\Entity(repositoryClass="AccountRoleRepository")
  * @ORM\HasLifecycleCallbacks
  */
@@ -38,31 +38,35 @@ class AccountRoleEntity
      * @ORM\Column(type="integer")
      */
     protected $id;
+
     /** @ORM\Column(type="string", length=16, nullable=false, unique=true) */
     protected $roleKey;
+
     /** @ORM\Column(type="string", length=32, nullable=false, unique=true) */
     protected $roleTitle;
+
     /** @ORM\Column(type="datetime", nullable=false) */
     protected $dateCreated;
+
     /** @ORM\Column(type="datetime", nullable=false) */
     protected $dateUpdated;
+
     /** @ORM\Column(type="boolean", options={"default":true}) */
     protected $status;
 
     /**
      * @return mixed
      */
-    public function getId(): int
+    public function getId() : int
     {
         return $this->id;
     }
 
     /**
      * @param $key
-     *
      * @return $this
      */
-    public function setKey($key): AccountRoleEntity
+    public function setKey($key) : self
     {
         $this->roleKey = $key;
         return $this;
@@ -71,17 +75,16 @@ class AccountRoleEntity
     /**
      * @return mixed
      */
-    public function getKey(): string
+    public function getKey() : string
     {
         return $this->roleKey;
     }
 
     /**
      * @param $value
-     *
      * @return $this
      */
-    public function setTitle($value): AccountRoleEntity
+    public function setTitle($value) : self
     {
         $this->roleTitle = $value;
         return $this;
@@ -90,7 +93,7 @@ class AccountRoleEntity
     /**
      * @return mixed
      */
-    public function getTitle(): string
+    public function getTitle() : string
     {
         return $this->roleTitle;
     }
@@ -114,19 +117,18 @@ class AccountRoleEntity
     /**
      * @return mixed
      */
-    public function getStatus(): bool
+    public function getStatus() : bool
     {
         return $this->status;
     }
 
     /**
      * @param $status
-     *
      * @return $this
      */
-    public function setStatus($status): AccountRoleEntity
+    public function setStatus($status) : self
     {
-        $this->status = (bool)$status;
+        $this->status = (bool) $status;
         return $this;
     }
 
@@ -138,7 +140,7 @@ class AccountRoleEntity
     public function onPrePersist()
     {
         $this->dateCreated
-            = $this->dateUpdated = new DateTime("now");
+             = $this->dateUpdated = new DateTime('now');
     }
 
     /**
@@ -148,7 +150,7 @@ class AccountRoleEntity
      */
     public function onPreUpdate()
     {
-        $this->dateUpdated = new DateTime("now");
+        $this->dateUpdated = new DateTime('now');
     }
 
     private function __clone()

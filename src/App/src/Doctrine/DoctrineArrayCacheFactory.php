@@ -1,13 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Sharapov A. <alexander@sharapov.biz>
  * @link      http://www.sharapov.biz/
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
- * Date: 2019-04-10
- * Time: 22:30
+ *     Date: 2019-04-10
+ *     Time: 22:30
  */
-
-declare(strict_types=1);
 
 namespace App\Doctrine;
 
@@ -16,7 +17,7 @@ use Interop\Container\ContainerInterface;
 
 class DoctrineArrayCacheFactory
 {
-    public function __invoke(ContainerInterface $container): ArrayCache
+    public function __invoke(ContainerInterface $container) : ArrayCache
     {
         return new ArrayCache();
     }

@@ -1,13 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Sharapov A. <alexander@sharapov.biz>
  * @link      http://www.sharapov.biz/
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
- * Date: 18.10.2019
- * Time: 23:42
+ *     Date: 18.10.2019
+ *     Time: 23:42
  */
-
-declare(strict_types=1);
 
 namespace App\Doctrine\Hydrator\Strategy;
 
@@ -15,6 +16,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Inflector\Inflector;
 use LogicException;
+
+use function array_udiff;
+use function get_class;
+use function method_exists;
+use function sprintf;
 
 /**
  * When this strategy is used for Collections, if the new collection does not contain elements that are present in
@@ -32,9 +38,10 @@ use LogicException;
 class AllowRemoveByValue extends AbstractCollectionStrategy
 {
     /**
-     * {@inheritDoc}
+     * @param mixed $value
+     * @param array|null $data
+     * @return array|Collection|mixed
      */
-
     public function hydrate($value, ?array $data)
     {
         // AllowRemove strategy need "adder" and "remover"

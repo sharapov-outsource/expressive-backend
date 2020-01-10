@@ -1,13 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Sharapov A. <alexander@sharapov.biz>
  * @link      http://www.sharapov.biz/
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
- * Date: 2019-04-28
- * Time: 22:11
+ *     Date: 2019-04-28
+ *     Time: 22:11
  */
-
-declare(strict_types=1);
 
 namespace App\Handler;
 
@@ -15,11 +16,11 @@ use App\Entity\Account\AccountRoleEntity;
 use App\Traits\EntityManagerTrait;
 use App\Traits\RouterTrait;
 use Doctrine\ORM\EntityManager;
+use Laminas\Diactoros\Response\JsonResponse;
+use Mezzio\Router;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Zend\Diactoros\Response\JsonResponse;
-use Zend\Expressive\Router;
 
 class DbTestHandler implements RequestHandlerInterface
 {
@@ -35,7 +36,7 @@ class DbTestHandler implements RequestHandlerInterface
             ->setRouter($router);
     }
 
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $request) : ResponseInterface
     {
         $roles = $this->getRepository(AccountRoleEntity::class);
 

@@ -1,24 +1,26 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Sharapov A. <alexander@sharapov.biz>
  * @link      http://www.sharapov.biz/
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
- * Date: 2019-02-23
- * Time: 13:57
+ *     Date: 2019-02-23
+ *     Time: 13:57
  */
-declare(strict_types=1);
 
 namespace App\Exception;
 
 use DomainException;
-use Zend\ProblemDetails\Exception\CommonProblemDetailsExceptionTrait;
-use Zend\ProblemDetails\Exception\ProblemDetailsExceptionInterface;
+use Mezzio\ProblemDetails\Exception\CommonProblemDetailsExceptionTrait;
+use Mezzio\ProblemDetails\Exception\ProblemDetailsExceptionInterface;
 
 class OutOfBoundsException extends DomainException implements ProblemDetailsExceptionInterface
 {
     use CommonProblemDetailsExceptionTrait;
 
-    public static function create(string $message): self
+    public static function create(string $message) : self
     {
         $e = new self($message);
         $e->status = 400;

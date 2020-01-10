@@ -1,13 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Sharapov A. <alexander@sharapov.biz>
  * @link      http://www.sharapov.biz/
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
- * Date: 27.12.2019
- * Time: 22:58
+ *     Date: 27.12.2019
+ *     Time: 22:58
  */
-
-declare(strict_types=1);
 
 namespace App\Library;
 
@@ -16,6 +17,19 @@ use ArrayIterator;
 use Countable;
 use IteratorAggregate;
 use JsonSerializable;
+
+use function array_key_exists;
+use function array_merge;
+use function array_merge_recursive;
+use function array_pop;
+use function array_replace;
+use function count;
+use function explode;
+use function is_array;
+use function is_null;
+use function is_string;
+use function json_encode;
+use function strpos;
 
 /**
  * Dot
@@ -47,7 +61,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
      * if the key doesn't exist already
      *
      * @param array|int|string $keys
-     * @param mixed $value
+     * @param null|mixed $value
      */
     public function add($keys, $value = null)
     {
@@ -73,7 +87,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
     /**
      * Delete the contents of a given key or keys
      *
-     * @param array|int|string|null $keys
+     * @param null|array|int|string $keys
      */
     public function clear($keys = null)
     {
@@ -83,7 +97,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
             return;
         }
 
-        $keys = (array)$keys;
+        $keys = (array) $keys;
 
         foreach ($keys as $key) {
             $this->set($key, []);
@@ -97,7 +111,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
      */
     public function delete($keys)
     {
-        $keys = (array)$keys;
+        $keys = (array) $keys;
 
         foreach ($keys as $key) {
             if ($this->exists($this->items, $key)) {
@@ -127,7 +141,6 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
      *
      * @param array $array Array to validate
      * @param int|string $key The key to look for
-     *
      * @return bool
      */
     protected function exists($array, $key)
@@ -139,7 +152,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
      * Flatten an array with the given character as a key delimiter
      *
      * @param string $delimiter
-     * @param array|null $items
+     * @param null|array $items
      * @param string $prepend
      * @return array
      */
@@ -168,8 +181,8 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
     /**
      * Return the value of a given key
      *
-     * @param int|string|null $key
-     * @param mixed $default
+     * @param null|int|string $key
+     * @param null|mixed $default
      * @return mixed
      */
     public function get($key = null, $default = null)
@@ -213,7 +226,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
             return $items->all();
         }
 
-        return (array)$items;
+        return (array) $items;
     }
 
     /**
@@ -224,7 +237,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
      */
     public function has($keys)
     {
-        $keys = (array)$keys;
+        $keys = (array) $keys;
 
         if (! $this->items || $keys === []) {
             return false;
@@ -252,7 +265,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
     /**
      * Check if a given key or keys are empty
      *
-     * @param array|int|string|null $keys
+     * @param null|array|int|string $keys
      * @return bool
      */
     public function isEmpty($keys = null)
@@ -261,7 +274,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
             return empty($this->items);
         }
 
-        $keys = (array)$keys;
+        $keys = (array) $keys;
 
         foreach ($keys as $key) {
             if (! empty($this->get($key))) {
@@ -276,7 +289,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
      * Merge a given array or a Dot object with the given key
      * or with the whole Dot object
      *
-     * @param array|string|self $key
+     * @param array|self|string $key
      * @param array|self $value
      */
     public function merge($key, $value = [])
@@ -284,7 +297,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
         if (is_array($key)) {
             $this->items = array_merge($this->items, $key);
         } elseif (is_string($key)) {
-            $items = (array)$this->get($key);
+            $items = (array) $this->get($key);
             $value = array_merge($items, $this->getArrayItems($value));
 
             $this->set($key, $value);
@@ -299,7 +312,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
      *
      * Duplicate keys are converted to arrays.
      *
-     * @param array|string|self $key
+     * @param array|self|string $key
      * @param array|self $value
      */
     public function mergeRecursive($key, $value = [])
@@ -307,7 +320,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
         if (is_array($key)) {
             $this->items = array_merge_recursive($this->items, $key);
         } elseif (is_string($key)) {
-            $items = (array)$this->get($key);
+            $items = (array) $this->get($key);
             $value = array_merge_recursive($items, $this->getArrayItems($value));
 
             $this->set($key, $value);
@@ -323,7 +336,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
      * Instead of converting duplicate keys to arrays, the value from
      * given array will replace the value in Dot object.
      *
-     * @param array|string|self $key
+     * @param array|self|string $key
      * @param array|self $value
      */
     public function mergeRecursiveDistinct($key, $value = [])
@@ -331,7 +344,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
         if (is_array($key)) {
             $this->items = $this->arrayMergeRecursiveDistinct($this->items, $key);
         } elseif (is_string($key)) {
-            $items = (array)$this->get($key);
+            $items = (array) $this->get($key);
             $value = $this->arrayMergeRecursiveDistinct($items, $this->getArrayItems($value));
 
             $this->set($key, $value);
@@ -368,8 +381,8 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
      * Return the value of a given key and
      * delete the key
      *
-     * @param int|string|null $key
-     * @param mixed $default
+     * @param null|int|string $key
+     * @param null|mixed $default
      * @return mixed
      */
     public function pull($key = null, $default = null)
@@ -392,7 +405,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
      * in a given key
      *
      * @param mixed $key
-     * @param mixed $value
+     * @param null|mixed $value
      */
     public function push($key, $value = null)
     {
@@ -414,7 +427,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
      * Replace all values or values within the given key
      * with an array or Dot object
      *
-     * @param array|string|self $key
+     * @param array|self|string $key
      * @param array|self $value
      */
     public function replace($key, $value = [])
@@ -422,7 +435,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
         if (is_array($key)) {
             $this->items = array_replace($this->items, $key);
         } elseif (is_string($key)) {
-            $items = (array)$this->get($key);
+            $items = (array) $this->get($key);
             $value = array_replace($items, $this->getArrayItems($value));
 
             $this->set($key, $value);
@@ -435,7 +448,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
      * Set a given key / value pair or pairs
      *
      * @param array|int|string $keys
-     * @param mixed $value
+     * @param null|mixed $value
      */
     public function set($keys, $value = null)
     {
@@ -472,8 +485,6 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
 
     /**
      * Replace all items with a given array as a reference
-     *
-     * @param array $items
      */
     public function setReference(array &$items)
     {
@@ -483,7 +494,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
     /**
      * Return the value of a given key or all the values as JSON
      *
-     * @param mixed $key
+     * @param null|mixed $key
      * @param int $options
      * @return string
      */
@@ -529,7 +540,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
     /**
      * Set a given value to the given key
      *
-     * @param int|string|null $key
+     * @param null|int|string $key
      * @param mixed $value
      */
     public function offsetSet($key, $value)
@@ -562,7 +573,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
     /**
      * Return the number of items in a given key
      *
-     * @param int|string|null $key
+     * @param null|int|string $key
      * @return int
      */
     public function count($key = null)
@@ -579,7 +590,7 @@ class ArrayDotAccess implements ArrayAccess, Countable, IteratorAggregate, JsonS
     /**
      * Get an iterator for the stored items
      *
-     * @return \ArrayIterator
+     * @return ArrayIterator
      */
     public function getIterator()
     {

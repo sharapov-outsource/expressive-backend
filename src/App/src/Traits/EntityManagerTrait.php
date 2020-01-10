@@ -1,13 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Sharapov A. <alexander@sharapov.biz>
  * @link      http://www.sharapov.biz/
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
- * Date: 2019-05-08
- * Time: 14:15
+ *     Date: 2019-05-08
+ *     Time: 14:15
  */
-
-declare(strict_types=1);
 
 namespace App\Traits;
 
@@ -23,9 +24,7 @@ trait EntityManagerTrait
     /**
      * Returns entity repository collection
      *
-     * @param string $entityClass
-     *
-     * @return ObjectRepository|EntityRepository
+     * @return EntityRepository|ObjectRepository
      */
     public function getRepository(string $entityClass)
     {
@@ -45,11 +44,9 @@ trait EntityManagerTrait
     /**
      * Sets EntityManager
      *
-     * @param EntityManager $entityManager
-     *
      * @return $this
      */
-    public function setEntityManager(EntityManager $entityManager): self
+    public function setEntityManager(EntityManager $entityManager) : self
     {
         $this->entityManager = $entityManager;
         return $this;

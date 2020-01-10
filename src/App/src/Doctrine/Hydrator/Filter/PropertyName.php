@@ -1,21 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * @copyright Sharapov A. <alexander@sharapov.biz>
+ * @link      http://www.sharapov.biz/
+ * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
+ *     Date: 18.10.2019
+ *     Time: 23:42
+ */
+
 namespace App\Doctrine\Hydrator\Filter;
 
-use Zend\Hydrator\Filter\FilterInterface;
+use Laminas\Hydrator\Filter\FilterInterface;
+
+use function in_array;
+use function is_array;
 
 /**
  * Provides a filter to restrict returned fields by whitelisting or
  * blacklisting property names.
- *
- * @license MIT
- * @link    http://www.doctrine-project.org/
- * @author  Liam O'Boyle <liam@ontheroad.net.nz>
  */
 class PropertyName implements FilterInterface
 {
     /**
-     * The propteries to exclude.
+     * The properties to exclude.
      *
      * @var array
      */
@@ -26,7 +35,7 @@ class PropertyName implements FilterInterface
      *
      * @var bool
      */
-    protected $exclude = null;
+    protected $exclude;
 
     /**
      * @param [ string | array ] $properties The properties to exclude or include.
@@ -40,7 +49,7 @@ class PropertyName implements FilterInterface
             : [$properties];
     }
 
-    public function filter($property)
+    public function filter(string $property) : bool
     {
         return in_array($property, $this->properties)
             ? ! $this->exclude

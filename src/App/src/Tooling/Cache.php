@@ -1,22 +1,29 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Sharapov A. <alexander@sharapov.biz>
  * @link      http://www.sharapov.biz/
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
- * Date: 27.12.2019
- * Time: 21:41
+ *     Date: 27.12.2019
+ *     Time: 21:41
  */
-
-declare(strict_types=1);
 
 namespace App\Tooling;
 
+use Mezzio\Tooling\ConfigAndContainerTrait;
+use Mezzio\Tooling\Module\RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zend\Expressive\Tooling\ConfigAndContainerTrait;
-use Zend\Expressive\Tooling\Module\RuntimeException;
+
+use function file_exists;
+use function getcwd;
+use function realpath;
+use function sprintf;
+use function unlink;
 
 class Cache extends Command
 {
@@ -30,7 +37,7 @@ class Cache extends Command
 
     const CONFIG_REMOVED = "Configured config cache file '%s' has been removed.";
 
-    public const HELP = <<< 'EOT'
+    public const HELP = <<<'EOT'
 Using this tool you can easily do the following:
 
 - Clear configuration cache
@@ -39,7 +46,7 @@ EOT;
     /**
      * Configure command.
      */
-    protected function configure(): void
+    protected function configure() : void
     {
         $this->setDescription('Managing in-app caching functionality');
         $this->setHelp(self::HELP);
@@ -53,9 +60,11 @@ EOT;
     /**
      * Execute command
      *
-     * {@inheritDoc}
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $config = $this->getConfig(realpath(getcwd()));
 

@@ -10,8 +10,8 @@
 declare(strict_types=1);
 
 use Psr\Container\ContainerInterface;
-use Zend\Expressive\Application;
-use Zend\Expressive\MiddlewareFactory;
+use Mezzio\Application;
+use Mezzio\MiddlewareFactory;
 
 date_default_timezone_set("UTC"); // Set the default timezone
 

@@ -1,25 +1,30 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Sharapov A. <alexander@sharapov.biz>
  * @link      http://www.sharapov.biz/
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License
- * Date: 2019-04-28
- * Time: 22:15
+ *     Date: 2019-04-28
+ *     Time: 22:15
  */
 
 namespace App\Entity\Account;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use function is_null;
+
 /**
  * @ORM\Table(name="AccountOption",
- * indexes={
- *   @ORM\Index(name="optionTypeKey", columns={"optionTypeKey"}),
- *   @ORM\Index(name="optionKey", columns={"optionKey"})
- * },
- *   uniqueConstraints={
- *   @ORM\UniqueConstraint(name="optionUnique", columns={"optionTypeKey", "optionKey", "account"})
- * })
+ *     indexes={
+ *     @ORM\Index(name="optionTypeKey", columns={"optionTypeKey"}),
+ *     @ORM\Index(name="optionKey", columns={"optionKey"})
+ *     },
+ *     uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="optionUnique", columns={"optionTypeKey", "optionKey", "account"})
+ *     })
  * @ORM\Entity(repositoryClass="AccountOptionRepository")
  */
 class AccountOptionEntity
@@ -27,26 +32,33 @@ class AccountOptionEntity
     const OPTION_TYPE_PERSONAL = 'personal';
     const OPTION_TYPE_ADDRESS = 'address';
     const OPTION_TYPE_CUSTOM = 'custom';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
     protected $id;
+
     /** @ORM\Column(type="accountOptionType") */
     protected $optionTypeKey;
+
     /** @ORM\Column(type="string", length=32, nullable=false) */
     protected $optionKey;
+
     /** @ORM\Column(type="string", length=10000, nullable=false) */
     protected $optionValue;
+
     /** @ORM\Column(type="boolean", options={"default":false}) */
     protected $readOnly;
+
     /** @ORM\Column(type="boolean", options={"default":false}) */
     protected $isRequired;
+
     /**
      * @ORM\ManyToOne(targetEntity="AccountEntity")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="account", referencedColumnName="id", onDelete="cascade")
+     *     @ORM\JoinColumn(name="account", referencedColumnName="id", onDelete="cascade")
      * })
      */
     protected $account;
@@ -87,12 +99,11 @@ class AccountOptionEntity
 
     /**
      * @param $value
-     *
      * @return $this
      */
     public function setIsRequired($value)
     {
-        $this->isRequired = (bool)$value;
+        $this->isRequired = (bool) $value;
         return $this;
     }
 
@@ -106,7 +117,6 @@ class AccountOptionEntity
 
     /**
      * @param $typeKey
-     *
      * @return $this
      */
     public function setOptionTypeKey($typeKey)
@@ -118,7 +128,6 @@ class AccountOptionEntity
             case self::OPTION_TYPE_ADDRESS:
                 $this->optionTypeKey = self::OPTION_TYPE_ADDRESS;
                 break;
-            case self::OPTION_TYPE_CUSTOM:
             default:
                 $this->optionTypeKey = self::OPTION_TYPE_CUSTOM;
         }
@@ -135,7 +144,6 @@ class AccountOptionEntity
 
     /**
      * @param $value
-     *
      * @return $this
      */
     public function setOptionKey($value)
@@ -154,7 +162,6 @@ class AccountOptionEntity
 
     /**
      * @param $value
-     *
      * @return $this
      */
     public function setOptionValue($value)
@@ -164,11 +171,10 @@ class AccountOptionEntity
     }
 
     /**
-     * @param      $key
-     * @param      $value
+     * @param $key
+     * @param $value
      * @param bool $isRequired
      * @param bool $readOnly
-     *
      * @return $this
      */
     public function setOptionPersonal(
@@ -187,7 +193,6 @@ class AccountOptionEntity
      * @param $value
      * @param $isRequired
      * @param $readOnly
-     *
      * @return $this
      */
     private function setOption($key, $value, $isRequired, $readOnly)
@@ -200,11 +205,10 @@ class AccountOptionEntity
     }
 
     /**
-     * @param      $key
-     * @param      $value
+     * @param $key
+     * @param $value
      * @param bool $isRequired
      * @param bool $readOnly
-     *
      * @return $this
      */
     public function setOptionAddress(
@@ -219,11 +223,10 @@ class AccountOptionEntity
     }
 
     /**
-     * @param      $key
-     * @param      $value
+     * @param $key
+     * @param $value
      * @param bool $isRequired
      * @param bool $readOnly
-     *
      * @return $this
      */
     public function setOptionCustom(
@@ -247,12 +250,11 @@ class AccountOptionEntity
 
     /**
      * @param $status
-     *
      * @return $this
      */
     public function setReadOnly($status)
     {
-        $this->readOnly = (bool)$status;
+        $this->readOnly = (bool) $status;
         return $this;
     }
 
@@ -265,8 +267,6 @@ class AccountOptionEntity
     }
 
     /**
-     * @param AccountEntity $account
-     *
      * @return $this
      */
     public function setAccount(AccountEntity $account)
