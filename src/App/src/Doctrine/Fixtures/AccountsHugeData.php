@@ -56,6 +56,7 @@ class AccountsHugeData implements FixtureInterface
             $accountRole = $manager
                 ->getRepository(Account\AccountRoleEntity::class)
                 ->findOneBy(['roleKey' => strtolower(Account\AccountRoleEntity::DEFAULT_ROLE_USER)]);
+
             /** @var Account\AccountRoleEntity $accountRole */
             $username = sprintf('%s@bixpressive.com', uniqid());
 
