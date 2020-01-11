@@ -30,7 +30,8 @@ require 'vendor/autoload.php';
 
 $commandList = [
     new Tooling\Cache('cache'),
-    new Tooling\Fixtures('fixtures')
+    new Tooling\Fixtures('fixtures'),
+    new Tooling\PerformanceTest('performance')
 ];
 
 $version = strstr(Versions::getVersion('mezzio/mezzio-tooling'), '@', true);

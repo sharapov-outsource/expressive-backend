@@ -13,30 +13,24 @@ declare(strict_types=1);
 namespace App\Tooling;
 
 use App\Doctrine\DoctrineFactory;
-use App\Doctrine\Fixtures\Accounts;
-use App\Doctrine\Fixtures\Roles;
+use App\Doctrine\Fixtures\AccountsHugeData;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\ORMException;
 use Mezzio\Tooling\ConfigAndContainerTrait;
 use Mezzio\Tooling\Module\RuntimeException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
 use function sprintf;
 
-class Fixtures extends Command
+class PerformanceTest extends Command
 {
     use ConfigAndContainerTrait;
 
-    public const FIXTURES_ACCOUNT_ROLES = 'Setting up account roles.';
+    public const FIXTURES_PERFORMANCE_TEST_START = 'Starting performance test.';
 
-    public const FIXTURES_ACCOUNT_DATA = 'Setting up accounts with default password %s.';
-
-    public const FIXTURES_LOADED = 'Database fixtures has been loaded.';
+    public const FIXTURES_PERFORMANCE_TEST_DONE = 'Performance test done.';
 
     public const HELP = <<<'EOT'
 Loading initial database fixtures. It creates user roles and a batch of test users.
@@ -45,15 +39,15 @@ EOT;
     /**
      * Configure command.
      */
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setDescription('Managing application initial database');
         $this->setHelp(self::HELP);
-        $this->addArgument(
+        /*$this->addArgument(
             'action',
             InputArgument::REQUIRED,
             'Accepts values: load'
-        );
+        );*/
     }
 
     /**
@@ -64,29 +58,24 @@ EOT;
      * @return int
      * @throws RuntimeException
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $loader = new Loader();
             $output->writeln(sprintf(
                 '<info>%s</info>',
-                self::FIXTURES_ACCOUNT_ROLES
+                self::FIXTURES_PERFORMANCE_TEST_START
             ));
-            $loader->addFixture(new Roles());
-            $output->writeln(sprintf(
-                '<info>%s</info>',
-                sprintf(self::FIXTURES_ACCOUNT_DATA, Accounts::$defaultPassword)
-            ));
-            $loader->addFixture(new Accounts());
+            $loader->addFixture(new AccountsHugeData());
             $entityManager = (new DoctrineFactory())(require 'config/container.php');
 
             $executor
-            = new ORMExecutor($entityManager, new ORMPurger());
-            $executor->execute($loader->getFixtures());
+                = new ORMExecutor($entityManager);
+            $executor->execute($loader->getFixtures(), true);
 
             $output->writeln(sprintf(
                 '<info>%s</info>',
-                self::FIXTURES_LOADED
+                self::FIXTURES_PERFORMANCE_TEST_DONE
             ));
 
             return 0;

@@ -14,13 +14,16 @@ namespace App\Doctrine\Fixtures;
 
 use App\Entity\Account;
 use Doctrine\Common\DataFixtures\FixtureInterface;
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectManager;
 
 use function strtolower;
 use function ucfirst;
 
 class Roles implements FixtureInterface
 {
+    /**
+     * @var array
+     */
     public $roles = [
         Account\AccountRoleEntity::DEFAULT_ROLE_ADMIN,
         Account\AccountRoleEntity::DEFAULT_ROLE_DEVELOPER,
@@ -28,6 +31,9 @@ class Roles implements FixtureInterface
         Account\AccountRoleEntity::DEFAULT_ROLE_USER,
     ];
 
+    /**
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         foreach ($this->roles as $role) {

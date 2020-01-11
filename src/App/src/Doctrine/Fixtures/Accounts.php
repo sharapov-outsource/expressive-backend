@@ -15,7 +15,7 @@ namespace App\Doctrine\Fixtures;
 use App\Entity\Account;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\FixtureInterface;
-use doctrine\common\persistence\objectmanager;
+use Doctrine\Common\Persistence\ObjectManager;
 
 use function array_rand;
 use function array_shift;
@@ -24,6 +24,9 @@ use function sprintf;
 
 class Accounts implements FixtureInterface
 {
+    /**
+     * @var array
+     */
     public $accounts = [
         [
             'firstName' => 'Christal',
@@ -577,9 +580,15 @@ class Accounts implements FixtureInterface
         ],
     ];
 
+    /**
+     * @var string
+     */
     public static $defaultPassword = '123456';
 
-    public function load(objectmanager $manager)
+    /**
+     * @param ObjectManager $manager
+     */
+    public function load(ObjectManager $manager)
     {
         $accountRoleCollection = $manager
             ->getRepository(Account\AccountRoleEntity::class)
