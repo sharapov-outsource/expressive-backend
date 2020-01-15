@@ -29,9 +29,9 @@ use function is_null;
  */
 class AccountOptionEntity
 {
-    const OPTION_TYPE_PERSONAL = 'personal';
-    const OPTION_TYPE_ADDRESS = 'address';
-    const OPTION_TYPE_CUSTOM = 'custom';
+    public const OPTION_TYPE_PERSONAL = 'personal';
+    public const OPTION_TYPE_ADDRESS = 'address';
+    public const OPTION_TYPE_CUSTOM = 'custom';
 
     /**
      * @ORM\Id
@@ -66,15 +66,15 @@ class AccountOptionEntity
     /**
      * UserAccountOption constructor.
      *
-     * @param null $type
-     * @param null $key
-     * @param null $value
+     * @param null|string $type
+     * @param null|string $key
+     * @param null|mixed $value
      */
     public function __construct($type = null, $key = null, $value = null)
     {
         $this->setIsRequired(0);
         $this->setReadOnly(0);
-        if (! is_null($type) and ! is_null($key)) {
+        if (! is_null($type) && ! is_null($key)) {
             $this->setOptionTypeKey($type);
             $this->setOptionKey($key);
             $this->setOptionValue($value);
@@ -116,7 +116,7 @@ class AccountOptionEntity
     }
 
     /**
-     * @param $typeKey
+     * @param string $typeKey
      * @return $this
      */
     public function setOptionTypeKey($typeKey)
@@ -143,7 +143,7 @@ class AccountOptionEntity
     }
 
     /**
-     * @param $value
+     * @param string $value
      * @return $this
      */
     public function setOptionKey($value)
@@ -161,7 +161,7 @@ class AccountOptionEntity
     }
 
     /**
-     * @param $value
+     * @param string $value
      * @return $this
      */
     public function setOptionValue($value)
@@ -171,8 +171,8 @@ class AccountOptionEntity
     }
 
     /**
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param string $value
      * @param bool $isRequired
      * @param bool $readOnly
      * @return $this
@@ -189,8 +189,8 @@ class AccountOptionEntity
     }
 
     /**
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param string $value
      * @param $isRequired
      * @param $readOnly
      * @return $this
@@ -205,8 +205,8 @@ class AccountOptionEntity
     }
 
     /**
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param string $value
      * @param bool $isRequired
      * @param bool $readOnly
      * @return $this
@@ -223,8 +223,8 @@ class AccountOptionEntity
     }
 
     /**
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param string $value
      * @param bool $isRequired
      * @param bool $readOnly
      * @return $this
@@ -249,7 +249,7 @@ class AccountOptionEntity
     }
 
     /**
-     * @param $status
+     * @param bool $status
      * @return $this
      */
     public function setReadOnly($status)

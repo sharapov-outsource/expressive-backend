@@ -16,19 +16,21 @@ use App\Entity\Account;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Faker;
 
-use function md5;
 use function microtime;
-use function date;
 use function fwrite;
 use function sprintf;
+use function date;
+use function ini_get;
 use function strtolower;
 use function uniqid;
 use function number_format;
-use function gc_enable;
-use function gc_collect_cycles;
 use function memory_get_usage;
 use function memory_get_peak_usage;
+use function md5;
+use function mt_rand;
+use function count;
 
 use const DATE_W3C;
 use const STDERR;
@@ -47,11 +49,18 @@ class AccountsHugeData implements FixtureInterface
     public function load(ObjectManager $manager)
     {
         $i = 0;
-        $p = 3000;
+
+        // You can increase or decrease the value depending on php memory limit
+        $batchSize = 4000;
 
         $startTime = microtime(true);
         fwrite(STDERR, sprintf('Started at %s%s', date(DATE_W3C), PHP_EOL));
-        gc_enable();
+        fwrite(STDERR, sprintf(
+            'PHP memory limit is %sMbytes and batch size is %s rows%s',
+            ini_get('memory_limit'),
+            $batchSize,
+            PHP_EOL
+        ));
         do {
             $accountRole = $manager
                 ->getRepository(Account\AccountRoleEntity::class)
@@ -60,12 +69,6 @@ class AccountsHugeData implements FixtureInterface
             /** @var Account\AccountRoleEntity $accountRole */
             $username = sprintf('%s@bixpressive.com', uniqid());
 
-            $accountOptionCollection = [
-                (new Account\AccountOptionEntity())->setOptionPersonal('firstName', uniqid()),
-                (new Account\AccountOptionEntity())->setOptionPersonal('lastName', uniqid()),
-                (new Account\AccountOptionEntity())->setOptionPersonal('gender', 'Male'),
-            ];
-
             $userAccount = new Account\AccountEntity();
             $userAccount
                 ->setUsername($username)
@@ -73,17 +76,22 @@ class AccountsHugeData implements FixtureInterface
                 ->setStatus(1)
                 ->setAccountRole($accountRole)
                 ->setIsActivated(1)
-                ->setAccountOption(new ArrayCollection($accountOptionCollection));
+                ->setAccountOption(new ArrayCollection([
+                    (new Account\AccountOptionEntity())->setOptionPersonal('firstName', Faker\Name::firstName()),
+                    (new Account\AccountOptionEntity())->setOptionPersonal('lastName', Faker\Name::lastName()),
+                    (new Account\AccountOptionEntity())->setOptionPersonal(
+                        'gender',
+                        ['Male', 'Female'][mt_rand(0, count(['Male', 'Female']) - 1)]
+                    ),
+                ]));
             $manager->persist($userAccount);
-            if ($i > 0 && $i % $p === 0) {
+            if ($i > 0 && $i % $batchSize === 0) {
                 $manager->flush();
                 $manager->clear();
-                gc_collect_cycles();
 
                 $current = memory_get_usage();
                 $peak = memory_get_peak_usage();
 
-                //$manager->clear();
                 fwrite(
                     STDERR,
                     sprintf(
@@ -97,13 +105,12 @@ class AccountsHugeData implements FixtureInterface
                     )
                 );
             }
-            if ($i > 0 && $i % 50 === 0) {
+            if ($i % 50 === 0) {
                 fwrite(STDERR, '.');
             }
             $i++;
         } while ($i < 60000);
         $manager->flush();
-        gc_collect_cycles();
         fwrite(
             STDERR,
             sprintf(

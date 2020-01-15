@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tooling;
 
 use App\Doctrine\DoctrineFactory;
+use App\Doctrine\Fixtures\AccountsHugeCsv;
 use App\Doctrine\Fixtures\AccountsHugeData;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
@@ -21,6 +22,7 @@ use Mezzio\Tooling\ConfigAndContainerTrait;
 use Mezzio\Tooling\Module\RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use function sprintf;
 
@@ -32,8 +34,10 @@ class PerformanceTest extends Command
 
     public const FIXTURES_PERFORMANCE_TEST_DONE = 'Performance test done.';
 
+    public const FIXTURES_UNKNOWN_ACTION = 'Unknown action value';
+
     public const HELP = <<<'EOT'
-Loading initial database fixtures. It creates user roles and a batch of test users.
+Performance test.
 EOT;
 
     /**
@@ -41,13 +45,13 @@ EOT;
      */
     protected function configure(): void
     {
-        $this->setDescription('Managing application initial database');
+        $this->setDescription('Performance testing tool');
         $this->setHelp(self::HELP);
-        /*$this->addArgument(
+        $this->addArgument(
             'action',
             InputArgument::REQUIRED,
-            'Accepts values: load'
-        );*/
+            'Accepts values: accounts, csv'
+        );
     }
 
     /**
@@ -62,15 +66,28 @@ EOT;
     {
         try {
             $loader = new Loader();
+            $action = $input->getArgument('action');
+
+            switch ($action) {
+                case 'accounts':
+                    $loader->addFixture(new AccountsHugeData());
+                    break;
+                case 'csv':
+                    $loader->addFixture(new AccountsHugeCsv());
+                    break;
+                default:
+                    throw new RuntimeException(self::FIXTURES_UNKNOWN_ACTION);
+            }
+
             $output->writeln(sprintf(
                 '<info>%s</info>',
                 self::FIXTURES_PERFORMANCE_TEST_START
             ));
-            $loader->addFixture(new AccountsHugeData());
+
+
             $entityManager = (new DoctrineFactory())(require 'config/container.php');
 
-            $executor
-                = new ORMExecutor($entityManager);
+            $executor = new ORMExecutor($entityManager);
             $executor->execute($loader->getFixtures(), true);
 
             $output->writeln(sprintf(

@@ -8,3 +8,5 @@ phpunit.xml
 vendor/
 etc/log/*.log
 !etc/log/.gitkeep
+etc/tmp/*
+!etc/tmp/.gitkeep
