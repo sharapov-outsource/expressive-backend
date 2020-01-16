@@ -64,7 +64,7 @@ class AccountsHugeCsv extends AccountsHugeData implements FixtureInterface
     public function load(ObjectManager $manager)
     {
         $i = 0;
-        $testRows = 200000;
+        $testRows = 20;
 
         // You can increase or decrease the value depending on php memory limit
         $batchSize = 4000;

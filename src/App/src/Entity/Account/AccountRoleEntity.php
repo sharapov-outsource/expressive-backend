@@ -25,12 +25,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AccountRoleEntity
 {
-    const DEFAULT_ROLE_ADMIN = 'administrator';
-    const DEFAULT_ROLE_USER = 'user';
-    const DEFAULT_ROLE_DEVELOPER = 'developer';
-    const DEFAULT_ROLE_MODERATOR = 'moderator';
-    const SORT_BY = 'roleTitle';
-    const ORDER_BY = 'ASC';
+    public const DEFAULT_ROLE_ADMIN = 'administrator';
+    public const DEFAULT_ROLE_USER = 'user';
+    public const DEFAULT_ROLE_DEVELOPER = 'developer';
+    public const DEFAULT_ROLE_MODERATOR = 'moderator';
+    public const SORT_BY = 'roleTitle';
+    public const ORDER_BY = 'ASC';
 
     /**
      * @ORM\Id
@@ -66,7 +66,7 @@ class AccountRoleEntity
      * @param $key
      * @return $this
      */
-    public function setKey($key) : self
+    public function setKey(string $key) : self
     {
         $this->roleKey = $key;
         return $this;
@@ -81,17 +81,17 @@ class AccountRoleEntity
     }
 
     /**
-     * @param $value
+     * @param string $value
      * @return $this
      */
-    public function setTitle($value) : self
+    public function setTitle(string $value) : self
     {
         $this->roleTitle = $value;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getTitle() : string
     {
@@ -99,23 +99,23 @@ class AccountRoleEntity
     }
 
     /**
-     * @return mixed
+     * @return DateTime
      */
-    public function getDateCreated()
+    public function getDateCreated() : DateTime
     {
         return $this->dateCreated;
     }
 
     /**
-     * @return mixed
+     * @return DateTime
      */
-    public function getDateUpdated()
+    public function getDateUpdated() : DateTime
     {
         return $this->dateUpdated;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function getStatus() : bool
     {
@@ -123,10 +123,10 @@ class AccountRoleEntity
     }
 
     /**
-     * @param $status
+     * @param bool $status
      * @return $this
      */
-    public function setStatus($status) : self
+    public function setStatus(bool $status) : self
     {
         $this->status = (bool) $status;
         return $this;

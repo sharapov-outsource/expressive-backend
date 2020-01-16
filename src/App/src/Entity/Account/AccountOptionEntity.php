@@ -90,18 +90,18 @@ class AccountOptionEntity
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getIsRequired()
+    public function getIsRequired() : bool
     {
         return $this->isRequired;
     }
 
     /**
-     * @param $value
+     * @param bool $value
      * @return $this
      */
-    public function setIsRequired($value)
+    public function setIsRequired(bool $value) : self
     {
         $this->isRequired = (bool) $value;
         return $this;
@@ -110,7 +110,7 @@ class AccountOptionEntity
     /**
      * @return mixed
      */
-    public function getOptionTypeKey()
+    public function getOptionTypeKey() : string
     {
         return $this->optionTypeKey;
     }
@@ -119,7 +119,7 @@ class AccountOptionEntity
      * @param string $typeKey
      * @return $this
      */
-    public function setOptionTypeKey($typeKey)
+    public function setOptionTypeKey(string $typeKey) : self
     {
         switch ($typeKey) {
             case self::OPTION_TYPE_PERSONAL:
@@ -137,7 +137,7 @@ class AccountOptionEntity
     /**
      * @return mixed
      */
-    public function getOptionKey()
+    public function getOptionKey() : string
     {
         return $this->optionKey;
     }
@@ -146,7 +146,7 @@ class AccountOptionEntity
      * @param string $value
      * @return $this
      */
-    public function setOptionKey($value)
+    public function setOptionKey(string $value) : self
     {
         $this->optionKey = $value;
         return $this;
@@ -155,7 +155,7 @@ class AccountOptionEntity
     /**
      * @return mixed
      */
-    public function getOptionValue()
+    public function getOptionValue() : string
     {
         return $this->optionValue;
     }
@@ -164,7 +164,7 @@ class AccountOptionEntity
      * @param string $value
      * @return $this
      */
-    public function setOptionValue($value)
+    public function setOptionValue(string $value) : self
     {
         $this->optionValue = $value;
         return $this;
@@ -178,11 +178,11 @@ class AccountOptionEntity
      * @return $this
      */
     public function setOptionPersonal(
-        $key,
-        $value,
-        $isRequired = false,
-        $readOnly = false
-    ) {
+        string $key,
+        string $value,
+        bool $isRequired = false,
+        bool $readOnly = false
+    ) : self {
         $this->setOptionTypeKey(self::OPTION_TYPE_PERSONAL);
         $this->setOption($key, $value, $isRequired, $readOnly);
         return $this;
@@ -195,7 +195,7 @@ class AccountOptionEntity
      * @param $readOnly
      * @return $this
      */
-    private function setOption($key, $value, $isRequired, $readOnly)
+    private function setOption(string $key, string $value, bool $isRequired, bool $readOnly) : self
     {
         $this->setOptionKey($key);
         $this->setOptionValue($value);
@@ -212,11 +212,11 @@ class AccountOptionEntity
      * @return $this
      */
     public function setOptionAddress(
-        $key,
-        $value,
-        $isRequired = false,
-        $readOnly = false
-    ) {
+        string $key,
+        string $value,
+        bool $isRequired = false,
+        bool $readOnly = false
+    ) : self {
         $this->setOptionTypeKey(self::OPTION_TYPE_ADDRESS);
         $this->setOption($key, $value, $isRequired, $readOnly);
         return $this;
@@ -230,20 +230,20 @@ class AccountOptionEntity
      * @return $this
      */
     public function setOptionCustom(
-        $key,
-        $value,
-        $isRequired = false,
-        $readOnly = false
-    ) {
+        string $key,
+        string $value,
+        bool $isRequired = false,
+        bool $readOnly = false
+    ) : self {
         $this->setOptionTypeKey(self::OPTION_TYPE_CUSTOM);
         $this->setOption($key, $value, $isRequired, $readOnly);
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getReadOnly()
+    public function getReadOnly() : bool
     {
         return $this->readOnly;
     }
@@ -252,7 +252,7 @@ class AccountOptionEntity
      * @param bool $status
      * @return $this
      */
-    public function setReadOnly($status)
+    public function setReadOnly(bool $status) : self
     {
         $this->readOnly = (bool) $status;
         return $this;
@@ -267,9 +267,10 @@ class AccountOptionEntity
     }
 
     /**
+     * @param AccountEntity $account
      * @return $this
      */
-    public function setAccount(AccountEntity $account)
+    public function setAccount(AccountEntity $account) : self
     {
         $this->account = $account;
         return $this;

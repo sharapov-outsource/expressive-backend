@@ -32,8 +32,8 @@ use function is_null;
  */
 class AccountEntity
 {
-    const SORT_BY = 'id';
-    const ORDER_BY = 'ASC';
+    public const SORT_BY = 'id';
+    public const ORDER_BY = 'ASC';
 
     /**
      * @ORM\Id
@@ -122,102 +122,102 @@ class AccountEntity
     /**
      * @return bool
      */
-    public function isUpdate()
+    public function isUpdate() : bool
     {
         return (bool) $this->id === 'NULL';
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getUsername()
+    public function getUsername() : string
     {
         return $this->username;
     }
 
     /**
-     * @param $username
+     * @param string $username
      * @return $this
      */
-    public function setUsername($username)
+    public function setUsername(string $username) : self
     {
         $this->username = $username;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getPassword()
+    public function getPassword() : string
     {
         return $this->password;
     }
 
     /**
-     * @param $password
+     * @param string $password
      * @return $this
      */
-    public function setPassword($password)
+    public function setPassword(string $password) : self
     {
         $this->password = $password;
         return $this;
     }
 
     /**
-     * @param null $format
+     * @param null|string $format
      * @return mixed
      */
     public function getDateCreated($format = null)
     {
-        if (! is_null($format)) {
+        if ($format !== null) {
             return $this->dateCreated->format($format);
         }
         return $this->dateCreated;
     }
 
     /**
-     * @param null $format
+     * @param null|string $format
      * @return mixed
      */
     public function getDateUpdated($format = null)
     {
-        if (! is_null($format)) {
+        if ($format !== null) {
             return $this->dateUpdated->format($format);
         }
         return $this->dateUpdated;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getStatus()
+    public function getStatus() : bool
     {
         return $this->status;
     }
 
     /**
-     * @param $status
+     * @param bool $status
      * @return $this
      */
-    public function setStatus($status)
+    public function setStatus(bool $status) : self
     {
         $this->status = (bool) $status;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getIsActivated()
+    public function getIsActivated() : bool
     {
         return $this->isActivated;
     }
 
     /**
-     * @param $status
+     * @param bool $status
      * @return $this
      */
-    public function setIsActivated($status)
+    public function setIsActivated(bool $status) : self
     {
         $this->isActivated = (bool) $status;
         return $this;
@@ -232,10 +232,10 @@ class AccountEntity
     }
 
     /**
-     * @param $activateToken
+     * @param string $activateToken
      * @return $this
      */
-    public function setActivateToken($activateToken)
+    public function setActivateToken(string $activateToken) : self
     {
         $this->activateToken = $activateToken;
         return $this;
@@ -250,21 +250,22 @@ class AccountEntity
     }
 
     /**
+     * @param AccountRoleEntity $accountRole
      * @return $this
      */
-    public function setAccountRole(AccountRoleEntity $accountRole)
+    public function setAccountRole(AccountRoleEntity $accountRole) : self
     {
         $this->accountRole = $accountRole;
         return $this;
     }
 
     /**
-     * @param null $format
+     * @param null|string $format
      * @return mixed
      */
     public function getTimeStampLastActive($format = null)
     {
-        if (! is_null($format)) {
+        if ($format !== null) {
             return $this->timeStampLastActive->format($format);
         }
         return $this->timeStampLastActive;
@@ -274,20 +275,20 @@ class AccountEntity
      * @return $this
      * @throws Exception
      */
-    public function setTimeStampLastActive()
+    public function setTimeStampLastActive() : self
     {
         $this->timeStampLastActive = new DateTime('now');
         return $this;
     }
 
     /**
-     * @param $optionTypeKey
+     * @param string $optionTypeKey
      * @param bool $returnAssoc
      * @return null|array|bool|Collection
      */
     public function getAccountTypeOptionCollection(
-        $optionTypeKey,
-        $returnAssoc = false
+        string $optionTypeKey,
+        bool $returnAssoc = false
     ) {
         if ($this->accountOption instanceof PersistentCollection) {
             $collection = $this->accountOption->filter(
@@ -317,14 +318,14 @@ class AccountEntity
     }
 
     /**
-     * @param null $optionKey
+     * @param null|string $optionKey
      * @param bool $returnObject
      * @return array|PersistentCollection|mixed
      */
     public function getAccountOption($optionKey = null, $returnObject = false)
     {
         if ($this->accountOption instanceof PersistentCollection) {
-            if (is_null($optionKey)) {
+            if ($optionKey === null) {
                 return $this->accountOption;
             }
             $option = $this->accountOption->filter(
@@ -345,17 +346,19 @@ class AccountEntity
     }
 
     /**
-     * @return AccountEntity
+     * @param ArrayCollection $arrayCollection
+     * @return $this
      */
-    public function setAccountOption(ArrayCollection $arrayCollection)
+    public function setAccountOption(ArrayCollection $arrayCollection) : self
     {
         return $this->addAccountOption($arrayCollection);
     }
 
     /**
+     * @param ArrayCollection $arrayCollection
      * @return $this
      */
-    public function addAccountOption(ArrayCollection $arrayCollection)
+    public function addAccountOption(ArrayCollection $arrayCollection) : self
     {
         foreach ($arrayCollection as $item) {
             $item->setAccount($this);
@@ -365,11 +368,11 @@ class AccountEntity
     }
 
     /**
-     * @param $optionKey
-     * @param $optionValue
+     * @param string $optionKey
+     * @param string $optionValue
      * @return null|bool
      */
-    public function updateAccountOption($optionKey, $optionValue)
+    public function updateAccountOption(string $optionKey, string $optionValue)
     {
         if ($this->accountOption instanceof PersistentCollection) {
             $option = $this->accountOption->filter(
@@ -391,10 +394,10 @@ class AccountEntity
     }
 
     /**
-     * @param $optionKey
+     * @param string $optionKey
      * @return null|mixed
      */
-    public function removeAccountOption($optionKey)
+    public function removeAccountOption(string $optionKey)
     {
         if ($this->accountOption instanceof PersistentCollection) {
             return $this->accountOption->filter(
@@ -421,10 +424,10 @@ class AccountEntity
     }
 
     /**
-     * @param $typeKey
+     * @param string $typeKey
      * @return null|Collection
      */
-    private function filterAccountOptionType($typeKey)
+    private function filterAccountOptionType(string $typeKey)
     {
         if ($this->accountOption instanceof PersistentCollection) {
             $option = $this->accountOption->filter(
@@ -459,7 +462,7 @@ class AccountEntity
     /**
      * @return array
      */
-    public function getAccountDefaultOptions()
+    public function getAccountDefaultOptions() : array
     {
         return $this->accountDefaultOptions;
     }
