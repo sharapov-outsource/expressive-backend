@@ -7,14 +7,18 @@ namespace App;
 use App\Doctrine\DoctrineArrayCacheFactory;
 use App\Doctrine\DoctrineFactory;
 use App\Entity\Account\AccountEntity;
+use App\Entity\Account\AccountRoleEntity;
 use App\Entity\Account\Hydrator\AccountEntityHydratorFactory;
 use App\Handler\HalResource\Account\AccountCollection;
+use App\Handler\HalResource\Role\RoleCollection;
 use App\Library\ArrayDotAccess;
 use App\Library\ArrayDotAccessFactory;
 use Doctrine\Common\Cache\Cache as DoctrineCache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\DBAL\Driver\PDOMySql\Driver;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Laminas\Hydrator\ObjectPropertyHydrator;
+use Laminas\Hydrator\ReflectionHydrator;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Mezzio\Hal\Metadata\MetadataMap;
 use Mezzio\Hal\Metadata\RouteBasedCollectionMetadata;
@@ -76,6 +80,8 @@ class ConfigProvider
                 // Hal resources
                 Handler\HalResource\Account\AccountHandler::class
                 => Handler\HalResource\Account\AccountHandlerFactory::class,
+                Handler\HalResource\Role\RoleHandler::class
+                => Handler\HalResource\Role\RoleHandlerFactory::class,
 
                 // Service resources
                 ArrayDotAccess::class => ArrayDotAccessFactory::class,
@@ -128,16 +134,24 @@ class ConfigProvider
                 'resource_class' => AccountEntity::class,
                 'route' => 'api.accounts.get',
                 'extractor' => AccountEntityHydratorFactory::class,
-                //ReflectionHydrator::class,
-                //ObjectPropertyHydrator::class
-
-                //'hydrator' => 'User\\Hydrator\\UserProfile',
             ],
             [
                 '__class__' => RouteBasedCollectionMetadata::class,
                 'collection_class' => AccountCollection::class,
                 'collection_relation' => 'Account',
                 'route' => 'api.accounts.get',
+            ],
+            [
+                '__class__' => RouteBasedResourceMetadata::class,
+                'resource_class' => AccountRoleEntity::class,
+                'route' => 'api.roles.get',
+                'extractor' => ReflectionHydrator::class,
+            ],
+            [
+                '__class__' => RouteBasedCollectionMetadata::class,
+                'collection_class' => RoleCollection::class,
+                'collection_relation' => 'Role',
+                'route' => 'api.roles.get',
             ],
             /*
             [

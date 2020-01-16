@@ -55,6 +55,11 @@ return static function (
         App\Handler\HalResource\Account\AccountHandler::class,
     ], 'api.accounts.get');
 
+    $app->get('/api/roles[/{id}]', [
+        BodyParamsMiddleware::class,
+        App\Handler\HalResource\Role\RoleHandler::class,
+    ], 'api.roles.get');
+
     // Documentation
     $app->get(
         '/api/ping',

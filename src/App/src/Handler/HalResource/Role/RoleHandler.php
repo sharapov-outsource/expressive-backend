@@ -10,11 +10,13 @@ declare(strict_types=1);
  *     Time: 22:11
  */
 
-namespace App\Handler\HalResource\Account;
+namespace App\Handler\HalResource\Role;
 
 use App\Entity\Account\AccountEntity;
+use App\Entity\Account\AccountRoleEntity;
 use App\Exception\NoResourceFoundException;
 use App\Exception\OutOfBoundsException;
+use App\Handler\HalResource\Role\RoleCollection;
 use App\Traits\EntityManagerTrait;
 use App\Traits\RestDispatchTrait;
 use App\Traits\RouterTrait;
@@ -26,7 +28,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class AccountHandler implements RequestHandlerInterface
+class RoleHandler implements RequestHandlerInterface
 {
     use EntityManagerTrait;
     use RestDispatchTrait;
@@ -46,7 +48,7 @@ class AccountHandler implements RequestHandlerInterface
     }
 
     /**
-     * Gets single user entity or collection
+     * Gets single role entity or collection
      *
      * @param ServerRequestInterface $request
      * @return ResponseInterface
@@ -61,7 +63,7 @@ class AccountHandler implements RequestHandlerInterface
     }
 
     /**
-     * Gets account collection
+     * Gets roles collection
      *
      * @throws OutOfBoundsException
      */
@@ -70,8 +72,8 @@ class AccountHandler implements RequestHandlerInterface
     ) : ResponseInterface {
         return $this->createResponse(
             $request,
-            new AccountCollection(
-                $this->getRepository(AccountEntity::class)
+            new RoleCollection(
+                $this->getRepository(AccountRoleEntity::class)
                      ->createQueryBuilder('c')
                      ->getQuery()
                      ->setMaxResults(25)
@@ -80,7 +82,7 @@ class AccountHandler implements RequestHandlerInterface
     }
 
     /**
-     * Gets single account entity
+     * Gets single role entity
      *
      * @param int $id
      * @param ServerRequestInterface $request
@@ -91,14 +93,14 @@ class AccountHandler implements RequestHandlerInterface
         int $id,
         ServerRequestInterface $request
     ) : ResponseInterface {
-        $account
-        = $this->getRepository(AccountEntity::class)
+        $role
+        = $this->getRepository(AccountRoleEntity::class)
                ->find($id);
 
-        if (! $account instanceof AccountEntity) {
-            throw NoResourceFoundException::create('Account not found');
+        if (! $role instanceof AccountRoleEntity) {
+            throw NoResourceFoundException::create('Role not found');
         }
 
-        return $this->createResponse($request, $account);
+        return $this->createResponse($request, $role);
     }
 }
