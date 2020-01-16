@@ -72,12 +72,12 @@ class AccountOptionEntity
      */
     public function __construct($type = null, $key = null, $value = null)
     {
-        $this->setIsRequired(0);
-        $this->setReadOnly(0);
-        if (! is_null($type) && ! is_null($key)) {
+        $this->setIsRequired(false);
+        $this->setReadOnly(false);
+        if ((null !== $type) && (null !== $key)) {
             $this->setOptionTypeKey($type);
             $this->setOptionKey($key);
-            $this->setOptionValue($value);
+            $this->setOptionValue((string) $value);
         }
     }
 

@@ -73,9 +73,9 @@ class AccountsHugeData implements FixtureInterface
             $userAccount
                 ->setUsername($username)
                 ->setPassword(md5(self::$defaultPassword))
-                ->setStatus(1)
+                ->setStatus(true)
                 ->setAccountRole($accountRole)
-                ->setIsActivated(1)
+                ->setIsActivated(true)
                 ->setAccountOption(new ArrayCollection([
                     (new Account\AccountOptionEntity())->setOptionPersonal('firstName', Faker\Name::firstName()),
                     (new Account\AccountOptionEntity())->setOptionPersonal('lastName', Faker\Name::lastName()),

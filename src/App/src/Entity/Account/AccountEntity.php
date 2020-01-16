@@ -107,8 +107,8 @@ class AccountEntity
      */
     public function __construct()
     {
-        $this->setIsActivated(0);
-        $this->setStatus(1);
+        $this->setIsActivated(false);
+        $this->setStatus(true);
     }
 
     /**

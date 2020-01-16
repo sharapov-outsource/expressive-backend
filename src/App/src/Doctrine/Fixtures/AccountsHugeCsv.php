@@ -133,9 +133,11 @@ class AccountsHugeCsv extends AccountsHugeData implements FixtureInterface
                         break;
                     case 'Username':
                     case 'Password':
+                        $userAccount->{'set' . $fieldName}($line[$f]);
+                        break;
                     case 'Status':
                     case 'IsActivated':
-                        $userAccount->{'set' . $fieldName}($line[$f]);
+                        $userAccount->{'set' . $fieldName}((bool)$line[$f]);
                         break;
                 }
             }

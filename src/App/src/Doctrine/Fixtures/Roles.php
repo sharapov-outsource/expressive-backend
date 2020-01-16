@@ -42,7 +42,7 @@ class Roles implements FixtureInterface
             $userAccountRole
                 ->setKey($role)
                 ->setTitle(ucfirst($role))
-                ->setStatus(1);
+                ->setStatus(true);
             $manager->persist($userAccountRole);
         }
         $manager->flush();
