@@ -8,16 +8,17 @@ use App\Doctrine\DoctrineArrayCacheFactory;
 use App\Doctrine\DoctrineFactory;
 use App\Entity\Account\AccountEntity;
 use App\Entity\Account\AccountRoleEntity;
+use App\Entity\Datascope\DatascopeEntity;
 use App\Entity\Account\Hydrator\AccountEntityHydratorFactory;
 use App\Handler\HalResource\Account\AccountCollection;
 use App\Handler\HalResource\Role\RoleCollection;
+use App\Handler\HalResource\Datascope\DatascopeCollection;
 use App\Library\ArrayDotAccess;
 use App\Library\ArrayDotAccessFactory;
 use Doctrine\Common\Cache\Cache as DoctrineCache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\DBAL\Driver\PDOMySql\Driver;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Laminas\Hydrator\ObjectPropertyHydrator;
 use Laminas\Hydrator\ReflectionHydrator;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Mezzio\Hal\Metadata\MetadataMap;
@@ -82,6 +83,8 @@ class ConfigProvider
                 => Handler\HalResource\Account\AccountHandlerFactory::class,
                 Handler\HalResource\Role\RoleHandler::class
                 => Handler\HalResource\Role\RoleHandlerFactory::class,
+                Handler\HalResource\Datascope\DatascopeHandler::class
+                => Handler\HalResource\Datascope\DatascopeHandlerFactory::class,
 
                 // Service resources
                 ArrayDotAccess::class => ArrayDotAccessFactory::class,
@@ -152,6 +155,18 @@ class ConfigProvider
                 'collection_class' => RoleCollection::class,
                 'collection_relation' => 'Role',
                 'route' => 'api.roles.get',
+            ],
+            [
+                '__class__' => RouteBasedResourceMetadata::class,
+                'resource_class' => DatascopeEntity::class,
+                'route' => 'api.datascopes.get',
+                'extractor' => ReflectionHydrator::class,
+            ],
+            [
+                '__class__' => RouteBasedCollectionMetadata::class,
+                'collection_class' => DatascopeCollection::class,
+                'collection_relation' => 'Datascope',
+                'route' => 'api.datascopes.get',
             ],
             /*
             [

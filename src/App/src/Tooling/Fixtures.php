@@ -14,6 +14,7 @@ namespace App\Tooling;
 
 use App\Doctrine\DoctrineFactory;
 use App\Doctrine\Fixtures\Accounts;
+use App\Doctrine\Fixtures\Datascope;
 use App\Doctrine\Fixtures\Roles;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
@@ -31,6 +32,8 @@ use function sprintf;
 class Fixtures extends Command
 {
     use ConfigAndContainerTrait;
+
+    public const FIXTURES_DATASCOPE = 'Setting up default datascope.';
 
     public const FIXTURES_ACCOUNT_ROLES = 'Setting up account roles.';
 
@@ -68,6 +71,11 @@ EOT;
     {
         try {
             $loader = new Loader();
+            $output->writeln(sprintf(
+                '<info>%s</info>',
+                self::FIXTURES_DATASCOPE
+            ));
+            $loader->addFixture(new Datascope());
             $output->writeln(sprintf(
                 '<info>%s</info>',
                 self::FIXTURES_ACCOUNT_ROLES

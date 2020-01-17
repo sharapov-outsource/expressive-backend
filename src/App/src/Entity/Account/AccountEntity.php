@@ -19,8 +19,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Exception;
 
-use function is_null;
-
 /**
  * @ORM\Table(name="Account",
  *     indexes={

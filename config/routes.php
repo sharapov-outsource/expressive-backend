@@ -60,6 +60,11 @@ return static function (
         App\Handler\HalResource\Role\RoleHandler::class,
     ], 'api.roles.get');
 
+    $app->get('/api/datascopes[/{id}]', [
+        BodyParamsMiddleware::class,
+        App\Handler\HalResource\Datascope\DatascopeHandler::class,
+    ], 'api.datascopes.get');
+
     // Documentation
     $app->get(
         '/api/ping',
