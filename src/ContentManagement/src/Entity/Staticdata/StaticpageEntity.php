@@ -10,7 +10,7 @@ declare(strict_types=1);
  * Time: 02:40
  */
 
-namespace App\Entity\ContentManagement;
+namespace ContentManagement\Entity\Staticdata;
 
 use App\Entity\Account\AccountEntity;
 use App\Entity\Datascope\DatascopeEntity;

@@ -8,11 +8,11 @@ use App\Doctrine\DoctrineArrayCacheFactory;
 use App\Doctrine\DoctrineFactory;
 use App\Entity\Account\AccountEntity;
 use App\Entity\Account\AccountRoleEntity;
-use App\Entity\Datascope\DatascopeEntity;
 use App\Entity\Account\Hydrator\AccountEntityHydratorFactory;
-use App\Handler\HalResource\Account\AccountCollection;
-use App\Handler\HalResource\Role\RoleCollection;
-use App\Handler\HalResource\Datascope\DatascopeCollection;
+use App\Entity\Datascope\DatascopeEntity;
+use App\Handler\HalResource\Account;
+use App\Handler\HalResource\Datascope;
+use App\Handler\HalResource\Role;
 use App\Library\ArrayDotAccess;
 use App\Library\ArrayDotAccessFactory;
 use Doctrine\Common\Cache\Cache as DoctrineCache;
@@ -38,7 +38,7 @@ class ConfigProvider
      * To add a bit of a structure, each section is defined in a separate
      * method which returns an array with its configuration.
      */
-    public function __invoke() : array
+    public function __invoke(): array
     {
         return [
             'dependencies' => $this->getDependencies(),
@@ -55,7 +55,7 @@ class ConfigProvider
     /**
      * Returns the container dependencies
      */
-    private function getDependencies() : array
+    private function getDependencies(): array
     {
         return [
             'invokables' => [
@@ -63,10 +63,8 @@ class ConfigProvider
             ],
             'factories' => [
                 // Doctrine factories
-                'doctrine.entitymanager.orm_app'
-                => DoctrineFactory::class,
-                DoctrineCache::class
-                => DoctrineArrayCacheFactory::class,
+                'doctrine.entitymanager.orm_app' => DoctrineFactory::class,
+                DoctrineCache::class => DoctrineArrayCacheFactory::class,
                 // Documentation
                 Doc\InvalidParameterHandler::class => InvokableFactory::class,
                 Doc\MethodNotAllowedHandler::class => InvokableFactory::class,
@@ -74,17 +72,12 @@ class ConfigProvider
                 Doc\ResourceNotFoundHandler::class => InvokableFactory::class,
                 Doc\RuntimeErrorHandler::class => InvokableFactory::class,
                 // Main handlers
-                Handler\HomePageHandler::class
-                => Handler\HomePageHandlerFactory::class,
-                Handler\DbTestHandler::class
-                => Handler\DbTestHandlerFactory::class,
+                Handler\HomePageHandler::class => Handler\HomePageHandlerFactory::class,
+                Handler\DbTestHandler::class => Handler\DbTestHandlerFactory::class,
                 // Hal resources
-                Handler\HalResource\Account\AccountHandler::class
-                => Handler\HalResource\Account\AccountHandlerFactory::class,
-                Handler\HalResource\Role\RoleHandler::class
-                => Handler\HalResource\Role\RoleHandlerFactory::class,
-                Handler\HalResource\Datascope\DatascopeHandler::class
-                => Handler\HalResource\Datascope\DatascopeHandlerFactory::class,
+                Account\AccountHandler::class => Account\AccountHandlerFactory::class,
+                Role\RoleHandler::class => Role\RoleHandlerFactory::class,
+                Datascope\DatascopeHandler::class => Datascope\DatascopeHandlerFactory::class,
 
                 // Service resources
                 ArrayDotAccess::class => ArrayDotAccessFactory::class,
@@ -95,7 +88,7 @@ class ConfigProvider
     /**
      * Returns the container entities
      */
-    private function getEntities() : array
+    private function getEntities(): array
     {
         return [
             'driver' => [
@@ -129,7 +122,7 @@ class ConfigProvider
     /**
      * Returns HAL configuration
      */
-    public function getHalConfig() : array
+    public function getHalConfig(): array
     {
         return [
             [
@@ -140,7 +133,7 @@ class ConfigProvider
             ],
             [
                 '__class__' => RouteBasedCollectionMetadata::class,
-                'collection_class' => AccountCollection::class,
+                'collection_class' => Account\AccountCollection::class,
                 'collection_relation' => 'Account',
                 'route' => 'api.accounts.get',
             ],
@@ -152,7 +145,7 @@ class ConfigProvider
             ],
             [
                 '__class__' => RouteBasedCollectionMetadata::class,
-                'collection_class' => RoleCollection::class,
+                'collection_class' => Role\RoleCollection::class,
                 'collection_relation' => 'Role',
                 'route' => 'api.roles.get',
             ],
@@ -164,23 +157,10 @@ class ConfigProvider
             ],
             [
                 '__class__' => RouteBasedCollectionMetadata::class,
-                'collection_class' => DatascopeCollection::class,
+                'collection_class' => Datascope\DatascopeCollection::class,
                 'collection_relation' => 'Datascope',
                 'route' => 'api.datascopes.get',
             ],
-            /*
-            [
-                '__class__'      => RouteBasedResourceMetadata::class,
-                'resource_class' => Entity\SiteStatistic::class,
-                'route'          => 'api.statistics',
-                'extractor'      => ReflectionHydrator::class,
-            ],
-            [
-                '__class__'           => RouteBasedCollectionMetadata::class,
-                'collection_class'    => Site\StatisticCollection::class,
-                'collection_relation' => 'statistics',
-                'route'               => 'api.statistics',
-            ]*/
         ];
     }
 }

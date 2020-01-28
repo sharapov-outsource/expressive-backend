@@ -65,6 +65,11 @@ return static function (
         App\Handler\HalResource\Datascope\DatascopeHandler::class,
     ], 'api.datascopes.get');
 
+    $app->get('/api/staticpages[/{id}]', [
+        BodyParamsMiddleware::class,
+        ContentManagement\Handler\HalResource\Staticdata\StaticpageHandler::class,
+    ], 'api.staticpages.get');
+
     // Documentation
     $app->get(
         '/api/ping',

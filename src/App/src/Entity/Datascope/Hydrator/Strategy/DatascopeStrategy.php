@@ -10,18 +10,17 @@ declare(strict_types=1);
  *     Time: 20:41
  */
 
-namespace App\Entity\Account\Hydrator\Strategy;
+namespace App\Entity\Datascope\Hydrator\Strategy;
 
-use App\Entity\Account\AccountEntity;
-use App\Entity\Account\AccountRoleEntity;
+use App\Entity\Datascope\DatascopeEntity;
 use Laminas\Hydrator\Strategy\StrategyInterface;
 
 use function method_exists;
 
 /**
- * Class AccountRoleStrategy
+ * Class AccountStrategy
  */
-class AccountRoleStrategy implements StrategyInterface
+class DatascopeStrategy implements StrategyInterface
 {
     /**
      * @param mixed $value
@@ -29,21 +28,17 @@ class AccountRoleStrategy implements StrategyInterface
      */
     public function extract($value, ?object $object = null)
     {
-        if (! method_exists($object, 'getAccountRole')) {
+        if (! method_exists($object, 'getDatascope')) {
             return null;
         }
 
-        /** @var AccountEntity $object */
-        $object = $object->getAccountRole();
+        /** @var DatascopeEntity $object */
+        $object = $object->getDatascope();
 
-        if ($object instanceof AccountRoleEntity) {
+        if ($object instanceof DatascopeEntity) {
             return [
                 'id' => $object->getId(),
-                'title' => $object->getTitle(),
-                'key' => $object->getKey(),
-                'status' => $object->getStatus(),
-                'dateCreated' => $object->getDateCreated(),
-                'dateUpdated' => $object->getDateUpdated(),
+                'name' => $object->getDatascopeName(),
             ];
         }
         return null;

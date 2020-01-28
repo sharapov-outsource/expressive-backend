@@ -24,6 +24,7 @@ trait EntityManagerTrait
     /**
      * Returns entity repository collection
      *
+     * @param string $entityClass
      * @return EntityRepository|ObjectRepository
      */
     public function getRepository(string $entityClass)
@@ -36,7 +37,7 @@ trait EntityManagerTrait
      *
      * @return EntityManager
      */
-    public function getEntityManager()
+    public function getEntityManager() : EntityManager
     {
         return $this->entityManager;
     }

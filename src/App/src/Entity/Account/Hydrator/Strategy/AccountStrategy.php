@@ -13,15 +13,14 @@ declare(strict_types=1);
 namespace App\Entity\Account\Hydrator\Strategy;
 
 use App\Entity\Account\AccountEntity;
-use App\Entity\Account\AccountRoleEntity;
 use Laminas\Hydrator\Strategy\StrategyInterface;
 
 use function method_exists;
 
 /**
- * Class AccountRoleStrategy
+ * Class AccountStrategy
  */
-class AccountRoleStrategy implements StrategyInterface
+class AccountStrategy implements StrategyInterface
 {
     /**
      * @param mixed $value
@@ -29,21 +28,17 @@ class AccountRoleStrategy implements StrategyInterface
      */
     public function extract($value, ?object $object = null)
     {
-        if (! method_exists($object, 'getAccountRole')) {
+        if (! method_exists($object, 'getAccount')) {
             return null;
         }
 
         /** @var AccountEntity $object */
-        $object = $object->getAccountRole();
+        $object = $object->getAccount();
 
-        if ($object instanceof AccountRoleEntity) {
+        if ($object instanceof AccountEntity) {
             return [
                 'id' => $object->getId(),
-                'title' => $object->getTitle(),
-                'key' => $object->getKey(),
-                'status' => $object->getStatus(),
-                'dateCreated' => $object->getDateCreated(),
-                'dateUpdated' => $object->getDateUpdated(),
+                'username' => $object->getUsername(),
             ];
         }
         return null;

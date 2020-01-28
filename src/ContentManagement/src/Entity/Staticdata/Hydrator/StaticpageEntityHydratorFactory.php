@@ -10,19 +10,18 @@ declare(strict_types=1);
  *     Time: 23:27
  */
 
-namespace App\Entity\Account\Hydrator;
+namespace ContentManagement\Entity\Staticdata\Hydrator;
 
 use App\Doctrine\Hydrator\DoctrineObject;
+use App\Entity\Account\Hydrator\Strategy\AccountStrategy;
+use App\Entity\Datascope\Hydrator\Strategy\DatascopeStrategy;
 use Interop\Container\ContainerInterface;
-use Laminas\Hydrator\Filter\FilterComposite;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-
-use function in_array;
 
 /**
  * Hydrator for Doctrine Entity
  */
-class AccountEntityHydratorFactory implements FactoryInterface
+class StaticpageEntityHydratorFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
@@ -38,20 +37,13 @@ class AccountEntityHydratorFactory implements FactoryInterface
         $entityManager = $container->get('doctrine.entitymanager.orm_app');
         $hydrator = new DoctrineObject($entityManager);
         $hydrator->addStrategy(
-            'accountRole',
-            new Strategy\AccountRoleStrategy()
+            'account',
+            new AccountStrategy()
         );
         $hydrator->addStrategy(
-            'accountOption',
-            new Strategy\AccountOptionStrategy()
+            'datascope',
+            new DatascopeStrategy()
         );
-        $hydrator->addFilter('exclude', static function ($property) {
-            if (in_array($property, ['activateToken', 'password'])) {
-                return false;
-            }
-
-            return true;
-        }, FilterComposite::CONDITION_AND);
         return $hydrator;
     }
 }

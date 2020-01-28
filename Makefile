@@ -65,6 +65,10 @@ composer-update:
 	${INFO} "Updating dependencies..."
 	@ docker exec -it $(TEST_PROJECT)_phpfpm_container composer update
 
+composer-dump-autoload:
+	${INFO} "Updating autoload classes..."
+	@ docker exec -it $(TEST_PROJECT)_phpfpm_container composer dump-autoload
+
 init-test-database:
 	${INFO} "Creating database schema..."
 	@ docker exec -it $(TEST_PROJECT)_phpfpm_container $(APP_ORM_UPDATE_ARG)
