@@ -1,5 +1,7 @@
 # ExpressiveBackend
 
+![Image](https://travis-ci.org/sharapov-outsource/expressive-backend.svg?branch=master)
+
 #### Run composer install/update
 ```bash
 #!/usr/bin/env bash
