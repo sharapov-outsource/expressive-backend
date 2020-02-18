@@ -4,14 +4,17 @@
          bootstrap="vendor/autoload.php"
          colors="true">
     <testsuites>
-        <testsuite name="App\\Tests">
-            <directory>./test</directory>
+        <testsuite name="AppTest">
+            <directory>./src</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
+            <exclude>
+                <directory suffix=".php">./src/MezzioInstaller/Resources</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>

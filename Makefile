@@ -57,17 +57,19 @@ test:
 
 testing: clean-test test
 
-composer-install:
-	${INFO} "Installing dependencies..."
-	@ docker exec -it $(TEST_PROJECT)_phpfpm_container composer install
+# If the first argument is "composer"...
+ifeq (composer,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "composer"
+  RUN_COMPOSER_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(RUN_COMPOSER_ARGS):;@:)
+endif
 
-composer-update:
-	${INFO} "Updating dependencies..."
-	@ docker exec -it $(TEST_PROJECT)_phpfpm_container composer update
+.PHONY: composer
 
-composer-dump-autoload:
-	${INFO} "Updating autoload classes..."
-	@ docker exec -it $(TEST_PROJECT)_phpfpm_container composer dump-autoload
+composer:
+	${INFO} "Running composer $(RUN_COMPOSER_ARGS)..."
+	@ docker exec -it $(TEST_PROJECT)_phpfpm_container composer $(RUN_COMPOSER_ARGS)
 
 init-test-database:
 	${INFO} "Creating database schema..."
