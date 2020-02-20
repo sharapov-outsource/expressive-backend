@@ -4,6 +4,7 @@ services:
 before_install:
   - docker image build -t bixpressive_test_phpfpm:latest -f docker/test/Dockerfile.phpfpm docker/test
   - mkdir vendor && chmod 777 vendor
+  - chmod -R 777 config
 
 install:
   - docker run -it -v=$(pwd):/var/www bixpressive_test_phpfpm:latest composer install -n
