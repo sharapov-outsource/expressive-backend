@@ -5,9 +5,10 @@ before_install:
   - docker image build -t bixpressive_test_phpfpm:latest -f docker/test/Dockerfile.phpfpm docker/test
   - mkdir vendor && chmod 777 vendor
   - chmod -R 777 config
+  - touch composer.lock && chmod 777 composer.lock
 
 install:
-  - docker run -it -v=$(pwd):/var/www bixpressive_test_phpfpm:latest composer install -n
+  - docker run -it -v=$(pwd):/var/www bixpressive_test_phpfpm:latest composer install -n --no-scripts
 
 script:
   - phpunit
