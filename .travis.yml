@@ -6,7 +6,7 @@ before_install:
   - mkdir vendor && chmod 777 vendor
 
 install:
-  - docker run -it -v=$(pwd):/var/www bixpressive_test_phpfpm:latest composer install
+  - docker run -it -v=$(pwd):/var/www bixpressive_test_phpfpm:latest composer install -n
 
 script:
   - phpunit
