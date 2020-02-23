@@ -67,7 +67,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "AppTest\\": "src/AppTest/src/"
+      "AppTest\\": "src/AppTest/src/",
+      "ContentManagementTest\\": "src/ContentManagementTest/src/"
     }
   },
   "scripts": {
