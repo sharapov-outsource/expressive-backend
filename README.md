@@ -1,6 +1,8 @@
 # ExpressiveBackend
 
 ![Image](https://travis-ci.org/sharapov-outsource/expressive-backend.svg?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/sharapov-outsource/expressive-backend/badge.svg?branch=master)](https://coveralls.io/github/sharapov-outsource/expressive-backend?branch=master)
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/sharapov/bixpressive-webapi-test)
 
 #### Run composer install/update
 ```bash
