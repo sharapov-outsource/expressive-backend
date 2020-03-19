@@ -57,12 +57,12 @@ test:
 
 testing: clean-test test
 
-# If the first argument is "composer"...
-ifeq (composer,$(firstword $(MAKECMDGOALS)))
-  # use the rest as arguments for "composer"
-  RUN_COMPOSER_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-  # ...and turn them into do-nothing targets
-  $(eval $(RUN_COMPOSER_ARGS):;@:)
+# if the command starts with "composer" or console, grab the arguments for the command
+ifeq ($(firstword $(MAKECMDGOALS)), $(filter $(firstword $(MAKECMDGOALS)), console composer))
+    # use the rest as arguments for our real command
+    RUN_COMPOSER_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+    # turn them into null targets
+    $(eval $(RUN_COMPOSER_ARGS):;@:)
 endif
 
 .PHONY: composer
